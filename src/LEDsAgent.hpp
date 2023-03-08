@@ -4,7 +4,9 @@
 #include <queue.h>
 #include <task.h>
 #include <portmacro.h>
-#include "pico_unicorn.hpp"
+
+#include "libraries/pico_graphics/pico_graphics.hpp"
+#include "cosmic_unicorn.hpp"
 
 #include "Agent.hpp"
 
@@ -17,7 +19,7 @@ struct LEDsCommand {
 
 class LEDsAgent : public Agent {
 public:
-    LEDsAgent();
+    LEDsAgent(pimoroni::CosmicUnicorn &unicorn, pimoroni::PicoGraphics_PenRGB888 &rgb888);
 
     static const int WIDTH = 16;
     static const int HEIGHT = 7;
@@ -30,10 +32,11 @@ public:
 private:
     static const UBaseType_t TASK_PRIORITY = tskIDLE_PRIORITY + 1UL;
 
-    pimoroni::PicoUnicorn pico_unicorn;
 
 protected:
     QueueHandle_t command_queue;
+    pimoroni::CosmicUnicorn &cosmic_unicorn;
+    pimoroni::PicoGraphics_PenRGB888 &graphics;
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP

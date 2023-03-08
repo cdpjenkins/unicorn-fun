@@ -13,7 +13,8 @@ target_link_libraries(${NAME}
 		FreeRTOS-Kernel-Heap4
 		hardware_pio
 		hardware_dma
-		pico_unicorn)
+		cosmic_unicorn
+		)
 
 target_include_directories(${NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}

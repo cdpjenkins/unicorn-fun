@@ -5,7 +5,6 @@
 #include <portmacro.h>
 #include <task.h>
 #include <queue.h>
-#include "pico_unicorn.hpp"
 
 class Agent {
 public:

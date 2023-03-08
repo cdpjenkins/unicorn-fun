@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(NAME hello-freertos-pico)
+set(NAME unicorn-fun)
+
+set(PICO_BOARD "pico_w")
 
 include(pico_sdk_import.cmake)
 include(pimoroni_pico_import.cmake)
@@ -15,6 +17,9 @@ pico_sdk_init()
 SET(FREERTOS_CONFIG_FILE_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/port/FreeRTOS-Kernel" CACHE STRING "Local Config")
 include_directories("${FREERTOS_CONFIG_FILE_DIRECTORY}") 
 include(FreeRTOS_Kernel_import.cmake)
+include(libraries/cosmic_unicorn/cosmic_unicorn)
+include(libraries/pico_graphics/pico_graphics)
+
 
 
 #Add main source directory

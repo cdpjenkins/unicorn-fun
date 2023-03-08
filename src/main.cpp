@@ -12,29 +12,48 @@
 #include "CLIAgent.hpp"
 #include "CommandInterpreterAgent.hpp"
 
-void launch_tasks() {
-    LEDsAgent leds_agent;
-    leds_agent.start();
+#include "libraries/pico_graphics/pico_graphics.hpp"
+#include "cosmic_unicorn.hpp"
+using namespace pimoroni;
 
-    CommandInterpreterAgent command_interpreter_agent(leds_agent);
-    command_interpreter_agent.start();
-
-    CLIAgent cli_agent(leds_agent, command_interpreter_agent);
-    cli_agent.start();
-
-    vTaskStartScheduler();
-}
 
 int main()
 {
     stdio_init_all();
     sleep_ms(2000);
-    printf("GO\n");
+    printf("Starting unicorn-fun...\n");
+
+    printf("Yo!\n");
+
+    std::string message = "Oi baby!";
+
+
+    PicoGraphics_PenRGB888 graphics(32, 32, nullptr);
+    CosmicUnicorn cosmic_unicorn;
+
+    printf("About to init...!\n");
+
+    cosmic_unicorn.init();
+
+    printf("Did init!\n");
+
+
+
+    sleep_ms(10000);
 
     //Start tasks and scheduler
     const char *rtos_name = "FreeRTOS";
     printf("Starting %s on core 0:\n", rtos_name);
-    launch_tasks();
+    LEDsAgent ledsAgent(cosmic_unicorn, graphics);
+    ledsAgent.start();
+
+    CommandInterpreterAgent commandInterpreterAgent(ledsAgent);
+    commandInterpreterAgent.start();
+
+    CLIAgent cliAgent(ledsAgent, commandInterpreterAgent);
+    cliAgent.start();
+
+    vTaskStartScheduler();
 
     return 0;
 }
