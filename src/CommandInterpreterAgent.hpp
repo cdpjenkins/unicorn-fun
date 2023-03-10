@@ -3,11 +3,11 @@
 
 #include <message_buffer.h>
 #include "Agent.hpp"
-#include "LEDsAgent.hpp"
+#include "CosmicUnicornDisplayAgent.hpp"
 
 class CommandInterpreterAgent : public Agent {
 public:
-    CommandInterpreterAgent(LEDsAgent &agent);
+    CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent);
 
     [[noreturn]]
     void task_main() override;
@@ -16,7 +16,7 @@ public:
 
 private:
     MessageBufferHandle_t message_buffer;
-    LEDsAgent &leds_agent;
+    CosmicUnicornDisplayAgent &leds_agent;
 };
 
 

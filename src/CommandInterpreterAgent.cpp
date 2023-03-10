@@ -9,7 +9,7 @@
 #include "babi.h"
 #include "clear.h"
 
-CommandInterpreterAgent::CommandInterpreterAgent(LEDsAgent &agent) :
+CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("command_interpreter_task",
               configMINIMAL_STACK_SIZE,
               tskIDLE_PRIORITY + 1UL),
@@ -74,13 +74,13 @@ void CommandInterpreterAgent::task_main() {
         );
         if (receive_length > 0) {
             if (strcmp(receive_buffer, "oi") == 0) {
-                auto oi_command = LEDsCommand(oi);
+                auto oi_command = CosmicUnicornDisplayCommand(oi);
                 leds_agent.send(&oi_command);
             } else if (strcmp(receive_buffer, "babi") == 0) {
-                auto babi_command = LEDsCommand(babi);
+                auto babi_command = CosmicUnicornDisplayCommand(babi);
                 leds_agent.send(&babi_command);
             } else if (strcmp(receive_buffer, "clear") == 0) {
-                auto clear_command = LEDsCommand(clear);
+                auto clear_command = CosmicUnicornDisplayCommand(clear);
                 leds_agent.send(&clear_command);
             } else if (strcmp(receive_buffer, "stats") == 0) {
                 task_stats();

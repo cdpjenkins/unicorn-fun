@@ -10,21 +10,21 @@
 
 #include "Agent.hpp"
 
-struct LEDsCommand {
-    explicit LEDsCommand() : pixels(nullptr) {}
-    explicit LEDsCommand(const unsigned char *string) : pixels(string) {}
+struct CosmicUnicornDisplayCommand {
+    explicit CosmicUnicornDisplayCommand() : pixels(nullptr) {}
+    explicit CosmicUnicornDisplayCommand(const unsigned char *string) : pixels(string) {}
 
     const unsigned char* pixels;
 };
 
-class LEDsAgent : public Agent {
+class CosmicUnicornDisplayAgent : public Agent {
 public:
-    LEDsAgent(pimoroni::CosmicUnicorn &unicorn, pimoroni::PicoGraphics_PenRGB888 &rgb888);
+    CosmicUnicornDisplayAgent(pimoroni::CosmicUnicorn &unicorn, pimoroni::PicoGraphics_PenRGB888 &rgb888);
 
-    static const int WIDTH = 16;
-    static const int HEIGHT = 7;
+    static const int WIDTH = 32;
+    static const int HEIGHT = 32;
 
-    void send(LEDsCommand *pCommand);
+    void send(CosmicUnicornDisplayCommand *pCommand);
 
     [[noreturn]]
     void task_main() override;

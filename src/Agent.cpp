@@ -6,7 +6,7 @@
 
 #include "Agent.hpp"
 
-#include "LEDsAgent.hpp"
+#include "CosmicUnicornDisplayAgent.hpp"
 
 Agent::Agent(const char *taskName, uint32_t stackDepth, UBaseType_t taskPriority) :
     task_name(taskName),
@@ -24,10 +24,10 @@ void Agent::start() {
                                 task_priority,
                                 &leds_task);
     if (rc != pdPASS) {
-        printf("urgh failed to start LEDsAgent task: %ld\n", rc);
+        printf("urgh failed to start CosmicUnicornDisplayAgent task: %ld\n", rc);
     }
 }
 
 void Agent::entry_point_static_function(void *params) {
-    static_cast<LEDsAgent *>(params)->task_main();
+    static_cast<CosmicUnicornDisplayAgent *>(params)->task_main();
 }

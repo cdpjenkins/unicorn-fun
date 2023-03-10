@@ -8,7 +8,7 @@
 #include "oi.h"
 #include "babi.h"
 #include "clear.h"
-#include "LEDsAgent.hpp"
+#include "CosmicUnicornDisplayAgent.hpp"
 #include "CLIAgent.hpp"
 #include "CommandInterpreterAgent.hpp"
 
@@ -41,7 +41,7 @@ int main()
     //Start tasks and scheduler
     const char *rtos_name = "FreeRTOS";
     printf("Starting %s on core 0:\n", rtos_name);
-    LEDsAgent ledsAgent(cosmic_unicorn, graphics);
+    CosmicUnicornDisplayAgent ledsAgent(cosmic_unicorn, graphics);
     ledsAgent.start();
 
     CommandInterpreterAgent commandInterpreterAgent(ledsAgent);

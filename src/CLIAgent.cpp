@@ -3,9 +3,9 @@
 #include <cstdio>
 
 #include "CLIAgent.hpp"
-#include "LEDsAgent.hpp"
+#include "CosmicUnicornDisplayAgent.hpp"
 
-CLIAgent::CLIAgent(LEDsAgent &agent, CommandInterpreterAgent &interpreterAgent) :
+CLIAgent::CLIAgent(CosmicUnicornDisplayAgent &agent, CommandInterpreterAgent &interpreterAgent) :
     Agent("cli_task",
           configMINIMAL_STACK_SIZE * 2,
           TASK_PRIORITY),

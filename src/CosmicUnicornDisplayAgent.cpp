@@ -4,7 +4,7 @@
 #include "FreeRTOS.h"
 #include <queue.h>
 
-#include "LEDsAgent.hpp"
+#include "CosmicUnicornDisplayAgent.hpp"
 
 #include "Agent.hpp"
 
@@ -19,18 +19,18 @@
 
 using namespace pimoroni;
 
-LEDsAgent::LEDsAgent(pimoroni::CosmicUnicorn &unicorn, PicoGraphics_PenRGB888 &rgb888) :
+CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent(pimoroni::CosmicUnicorn &unicorn, PicoGraphics_PenRGB888 &rgb888) :
         Agent("leds_task",
               configMINIMAL_STACK_SIZE,
               tskIDLE_PRIORITY + 1UL),
         cosmic_unicorn(unicorn),
         graphics(rgb888)
 {
-    command_queue = xQueueCreate(16, sizeof(LEDsCommand));
+    command_queue = xQueueCreate(16, sizeof(CosmicUnicornDisplayCommand));
 }
 
 [[noreturn]]
-void LEDsAgent::task_main() {
+void CosmicUnicornDisplayAgent::task_main() {
 
     printf("Yo!\n");
 
@@ -38,7 +38,6 @@ void LEDsAgent::task_main() {
 
     int i = 0;
     while (true) {
-
         graphics.set_pen(0, 0, 0);
         graphics.clear();
 
@@ -67,63 +66,14 @@ void LEDsAgent::task_main() {
 
         cosmic_unicorn.update(&graphics);
 
-        printf("Drew!\n");
-
         vTaskDelay(DELAY);
     }
-
-//    std::string message = "Oi baby!";
-//
-//
-//    PicoGraphics_PenRGB888 graphics(32, 32, nullptr);
-//    CosmicUnicorn cosmic_unicorn;
-//
-//
-//    printf("About to init...!\n");
-//
-//    cosmic_unicorn.init();
-//
-//    printf("Did init!\n");
-//
-//    graphics.set_pen(128, 128, 128);
-//    graphics.text("Oi baby!", Point(0, 14), -1, 0.55);
-//
-//
-//    printf("Drawn!\n");
-//
-//    cosmic_unicorn.update(&graphics);
-//
-//
-//    printf("Drew!\n");
-
-    while (true) {
-        printf("Delay...\n");
-        vTaskDelay(1000);
-    }
-
-//    pico_unicorn.init();
-//
-//    while (true) {
-//        LEDsCommand command;
-//        BaseType_t rc = xQueueReceive(command_queue, (void *)&command, 1000);
-//        if (rc == pdTRUE) {
-//            int i = 0;
-//            for (int y = 0; y < HEIGHT; y++) {
-//                for (int x = 0; x < WIDTH; x++) {
-//                    unsigned char r = command.pixels[i++];
-//                    unsigned char g = command.pixels[i++];
-//                    unsigned char b = command.pixels[i++];
-//                    pico_unicorn.set_pixel(x, y, r, g, b);
-//                }
-//            }
-//        }
-//    }
 }
 
-void LEDsAgent::display_image(const uint8_t image[3072]) {
+void CosmicUnicornDisplayAgent::display_image(const uint8_t image[3072]) {
     const uint8_t *p = image;
-    for (int y = 0; y < 32; y++) {
-        for (int x = 0; x < 32; x++) {
+    for (int y = 0; y < WIDTH; y++) {
+        for (int x = 0; x < HEIGHT; x++) {
             uint8_t r = *p++;
             uint8_t g = *p++;
             uint8_t b = *p++;
@@ -136,7 +86,7 @@ void LEDsAgent::display_image(const uint8_t image[3072]) {
     cosmic_unicorn.update(&graphics);
 }
 
-void LEDsAgent::send(LEDsCommand *pCommand) {
+void CosmicUnicornDisplayAgent::send(CosmicUnicornDisplayCommand *pCommand) {
     BaseType_t rc = xQueueSendToBack(command_queue, pCommand, 0);
     if (rc != pdTRUE) {
         printf("Failed to send message: %ld\n", rc);

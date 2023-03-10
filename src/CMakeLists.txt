@@ -3,7 +3,7 @@ add_executable(${NAME}
 		Agent.cpp
 		CLIAgent.cpp
 		CommandInterpreterAgent.cpp
-        LEDsAgent.cpp)
+		CosmicUnicornDisplayAgent.cpp)
 
 include(libraries/pico_unicorn/pico_unicorn)
 
