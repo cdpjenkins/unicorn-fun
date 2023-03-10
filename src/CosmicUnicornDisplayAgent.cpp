@@ -11,11 +11,11 @@
 
 #include "libraries/pico_graphics/pico_graphics.hpp"
 #include "cosmic_unicorn.hpp"
-#include "CatFace32x32.hpp"
-#include "Dog32x32.hpp"
-#include "HeartCat32x32.hpp"
-#include "Cat32x32.hpp"
-#include "DogFace32x32.hpp"
+#include "images/CatFace32x32.hpp"
+#include "images/Dog32x32.hpp"
+#include "images/HeartCat32x32.hpp"
+#include "images/Cat32x32.hpp"
+#include "images/DogFace32x32.hpp"
 
 using namespace pimoroni;
 

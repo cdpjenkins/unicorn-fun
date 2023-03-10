@@ -5,14 +5,14 @@
 #include <cstring>
 #include <stdexcept>
 #include "CommandInterpreterAgent.hpp"
-#include "oi.h"
-#include "babi.h"
-#include "clear.h"
-#include "Cat32x32.hpp"
-#include "CatFace32x32.hpp"
-#include "Dog32x32.hpp"
-#include "DogFace32x32.hpp"
-#include "HeartCat32x32.hpp"
+#include "images/oi.h"
+#include "images/babi.h"
+#include "images/clear.h"
+#include "images/Cat32x32.hpp"
+#include "images/CatFace32x32.hpp"
+#include "images/Dog32x32.hpp"
+#include "images/DogFace32x32.hpp"
+#include "images/HeartCat32x32.hpp"
 
 CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("command_interpreter_task",

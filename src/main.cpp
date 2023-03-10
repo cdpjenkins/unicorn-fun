@@ -5,9 +5,9 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "oi.h"
-#include "babi.h"
-#include "clear.h"
+#include "images/oi.h"
+#include "images/babi.h"
+#include "images/clear.h"
 #include "CosmicUnicornDisplayAgent.hpp"
 #include "CLIAgent.hpp"
 #include "CommandInterpreterAgent.hpp"
