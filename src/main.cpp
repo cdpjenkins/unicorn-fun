@@ -25,9 +25,6 @@ int main()
 
     printf("Yo!\n");
 
-    std::string message = "Oi baby!";
-
-
     PicoGraphics_PenRGB888 graphics(32, 32, nullptr);
     CosmicUnicorn cosmic_unicorn;
 

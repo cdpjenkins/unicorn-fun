@@ -37,6 +37,8 @@ protected:
     QueueHandle_t command_queue;
     pimoroni::CosmicUnicorn &cosmic_unicorn;
     pimoroni::PicoGraphics_PenRGB888 &graphics;
+
+    void display_image(const uint8_t image[3072]);
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP
