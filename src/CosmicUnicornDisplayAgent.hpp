@@ -19,7 +19,7 @@ struct CosmicUnicornDisplayCommand {
 
 class CosmicUnicornDisplayAgent : public Agent {
 public:
-    CosmicUnicornDisplayAgent(pimoroni::CosmicUnicorn &unicorn, pimoroni::PicoGraphics_PenRGB888 &rgb888);
+    CosmicUnicornDisplayAgent();
 
     static const int WIDTH = 32;
     static const int HEIGHT = 32;
@@ -32,11 +32,11 @@ public:
 private:
     static const UBaseType_t TASK_PRIORITY = tskIDLE_PRIORITY + 1UL;
 
+    pimoroni::PicoGraphics_PenRGB888 graphics{WIDTH, HEIGHT, nullptr};
+    pimoroni::CosmicUnicorn cosmic_unicorn;
 
 protected:
     QueueHandle_t command_queue;
-    pimoroni::CosmicUnicorn &cosmic_unicorn;
-    pimoroni::PicoGraphics_PenRGB888 &graphics;
 
     void display_image(const uint8_t image[3072]);
 };

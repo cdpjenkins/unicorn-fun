@@ -23,25 +23,15 @@ int main()
     sleep_ms(2000);
     printf("Starting unicorn-fun...\n");
 
-    printf("Yo!\n");
-
-    PicoGraphics_PenRGB888 graphics(32, 32, nullptr);
-    CosmicUnicorn cosmic_unicorn;
-
-    printf("About to init...!\n");
-
-    cosmic_unicorn.init();
-
-    printf("Did init!\n");
-
-
+    printf("sizeof PicoGraphics_PenRGB888: %d\n", sizeof(PicoGraphics_PenRGB888));
+    printf("sizeof CosmicUnicorn: %d\n", sizeof(CosmicUnicorn));
 
     sleep_ms(10000);
 
     //Start tasks and scheduler
     const char *rtos_name = "FreeRTOS";
     printf("Starting %s on core 0:\n", rtos_name);
-    CosmicUnicornDisplayAgent ledsAgent(cosmic_unicorn, graphics);
+    CosmicUnicornDisplayAgent ledsAgent;
     ledsAgent.start();
 
     CommandInterpreterAgent commandInterpreterAgent(ledsAgent);

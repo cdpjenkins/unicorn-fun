@@ -19,14 +19,13 @@
 
 using namespace pimoroni;
 
-CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent(pimoroni::CosmicUnicorn &unicorn, PicoGraphics_PenRGB888 &rgb888) :
+CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
         Agent("leds_task",
-              configMINIMAL_STACK_SIZE,
-              tskIDLE_PRIORITY + 1UL),
-        cosmic_unicorn(unicorn),
-        graphics(rgb888)
+              configMINIMAL_STACK_SIZE * 2,
+              tskIDLE_PRIORITY + 1UL)
 {
     command_queue = xQueueCreate(16, sizeof(CosmicUnicornDisplayCommand));
+    cosmic_unicorn.init();
 }
 
 [[noreturn]]
