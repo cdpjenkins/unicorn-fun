@@ -17,6 +17,8 @@ public:
 private:
     MessageBufferHandle_t message_buffer;
     CosmicUnicornDisplayAgent &leds_agent;
+
+    void send_image_command(const uint8_t *image);
 };
 
 

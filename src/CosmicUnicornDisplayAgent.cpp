@@ -31,8 +31,15 @@ CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent(pimoroni::CosmicUnicorn &un
 
 [[noreturn]]
 void CosmicUnicornDisplayAgent::task_main() {
-
     printf("Yo!\n");
+
+    while (true) {
+        CosmicUnicornDisplayCommand command;
+        BaseType_t rc = xQueueReceive(command_queue, (void *)&command, 1000);
+        if (rc == pdTRUE) {
+            display_image(command.pixels);
+        }
+    }
 
     constexpr TickType_t DELAY = 10000;
 

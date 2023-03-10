@@ -8,11 +8,16 @@
 #include "oi.h"
 #include "babi.h"
 #include "clear.h"
+#include "Cat32x32.hpp"
+#include "CatFace32x32.hpp"
+#include "Dog32x32.hpp"
+#include "DogFace32x32.hpp"
+#include "HeartCat32x32.hpp"
 
 CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("command_interpreter_task",
               configMINIMAL_STACK_SIZE,
-              tskIDLE_PRIORITY + 1UL),
+              tskIDLE_PRIORITY + 2),
               leds_agent(agent)
 {
     message_buffer = xMessageBufferCreate(1024);
@@ -73,15 +78,18 @@ void CommandInterpreterAgent::task_main() {
                 1000
         );
         if (receive_length > 0) {
-            if (strcmp(receive_buffer, "oi") == 0) {
-                auto oi_command = CosmicUnicornDisplayCommand(oi);
-                leds_agent.send(&oi_command);
-            } else if (strcmp(receive_buffer, "babi") == 0) {
-                auto babi_command = CosmicUnicornDisplayCommand(babi);
-                leds_agent.send(&babi_command);
+            if (strcmp(receive_buffer, "cat") == 0) {
+                send_image_command(Cat32x32::image);
+            } else if (strcmp(receive_buffer, "cat_face") == 0) {
+                send_image_command(CatFace32x32::image);
+            } else if (strcmp(receive_buffer, "dog") == 0) {
+                send_image_command(Dog32x32::image);
+            } else if (strcmp(receive_buffer, "dog_face") == 0) {
+                send_image_command(DogFace32x32::image);
+            } else if (strcmp(receive_buffer, "heart_cat") == 0) {
+                send_image_command(HeartCat32x32::image);
             } else if (strcmp(receive_buffer, "clear") == 0) {
-                auto clear_command = CosmicUnicornDisplayCommand(clear);
-                leds_agent.send(&clear_command);
+                send_image_command(clear);
             } else if (strcmp(receive_buffer, "stats") == 0) {
                 task_stats();
             }
@@ -89,6 +97,11 @@ void CommandInterpreterAgent::task_main() {
             // I guess 0 means nothing was sent
         }
     }
+}
+
+void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
+    auto oi_command = CosmicUnicornDisplayCommand(image);
+    leds_agent.send(&oi_command);
 }
 
 void CommandInterpreterAgent::send_command(char *command_string) {
