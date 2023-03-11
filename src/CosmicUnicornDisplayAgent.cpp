@@ -1,5 +1,8 @@
 
 #include <cstdio>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #include "FreeRTOS.h"
 #include <queue.h>
@@ -43,6 +46,9 @@ void CosmicUnicornDisplayAgent::task_main() {
                 case CLEAR:
                     clear_display();
                     break;
+                case TEXT:
+                    display_text((char*)command.buffer);
+                    break;
                 default:
                     printf("Unrecognised command: %d\n", command.command_type);
                     break;
@@ -84,6 +90,26 @@ void CosmicUnicornDisplayAgent::task_main() {
 
         vTaskDelay(DELAY);
     }
+}
+
+void CosmicUnicornDisplayAgent::display_text(char *text_cstr) {
+    constexpr int TEXT_HEIGHT = 7;
+
+    std::istringstream iss(text_cstr);
+    std::string line;
+
+    graphics.set_pen(0, 0, 0);
+    graphics.clear();
+
+    int y = 0;
+    while (std::getline(iss, line, '_')) {
+        graphics.set_pen(32, 32, 32);
+        graphics.text(line, Point(0, y), -1, 0.55);
+
+        y += TEXT_HEIGHT;
+    }
+
+    cosmic_unicorn.update(&graphics);
 }
 
 void CosmicUnicornDisplayAgent::display_image(const uint8_t image[3072]) {

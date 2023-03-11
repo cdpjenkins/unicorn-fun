@@ -16,7 +16,7 @@
 
 CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("command_interpreter_task",
-              configMINIMAL_STACK_SIZE,
+              configMINIMAL_STACK_SIZE * 4,
               tskIDLE_PRIORITY + 2),
         cosmic_unicorn_agent(agent)
 {
@@ -78,20 +78,25 @@ void CommandInterpreterAgent::task_main() {
                 1000
         );
         if (receive_length > 0) {
-            if (strcmp(receive_buffer, "cat") == 0) {
+            std::string command{receive_buffer};
+
+            if (command == "cat") {
                 send_image_command(Cat32x32::image);
-            } else if (strcmp(receive_buffer, "cat_face") == 0) {
+            } else if (command == "cat_face") {
                 send_image_command(CatFace32x32::image);
-            } else if (strcmp(receive_buffer, "dog") == 0) {
+            } else if (command ==  "dog") {
                 send_image_command(Dog32x32::image);
-            } else if (strcmp(receive_buffer, "dog_face") == 0) {
+            } else if (command ==  "dog_face") {
                 send_image_command(DogFace32x32::image);
-            } else if (strcmp(receive_buffer, "heart_cat") == 0) {
+            } else if (command == "heart_cat") {
                 send_image_command(HeartCat32x32::image);
-            } else if (strcmp(receive_buffer, "clear") == 0) {
+            } else if (command == "clear") {
                 send_clear_command();
-            } else if (strcmp(receive_buffer, "stats") == 0) {
+            } else if (command == "stats") {
                 task_stats();
+            } else if (command.rfind("text", 0) == 0) {
+                std::string text = command.substr(5);
+                send_text_command(text);
             }
         } else {
             // I guess 0 means nothing was sent
@@ -100,7 +105,7 @@ void CommandInterpreterAgent::task_main() {
 }
 
 void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
-    auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image);
+    auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image, nullptr);
     cosmic_unicorn_agent.send(&command);
 }
 
@@ -119,6 +124,11 @@ void CommandInterpreterAgent::send_command(char *command_string) {
 }
 
 void CommandInterpreterAgent::send_clear_command() {
-    auto clear_command = CosmicUnicornDisplayCommand(CLEAR, nullptr);
+    auto clear_command = CosmicUnicornDisplayCommand(CLEAR, nullptr, nullptr);
     cosmic_unicorn_agent.send(&clear_command);
+}
+
+void CommandInterpreterAgent::send_text_command(std::string text) {
+    auto text_command = CosmicUnicornDisplayCommand(TEXT, nullptr, text.c_str());
+    cosmic_unicorn_agent.send(&text_command);
 }

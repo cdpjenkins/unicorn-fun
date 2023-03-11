@@ -19,6 +19,7 @@ private:
 
     void send_image_command(const uint8_t *image);
     void send_clear_command();
+    void send_text_command(std::string text);
 };
 
 

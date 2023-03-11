@@ -4,6 +4,7 @@
 #include <queue.h>
 #include <task.h>
 #include <portmacro.h>
+#include <cstring>
 
 #include "libraries/pico_graphics/pico_graphics.hpp"
 #include "cosmic_unicorn.hpp"
@@ -13,7 +14,8 @@
 enum CommandType {
     NONE,
     CLEAR,
-    DISPLAY_IMAGE
+    DISPLAY_IMAGE,
+    TEXT
 };
 
 struct CosmicUnicornDisplayCommand {
@@ -21,12 +23,18 @@ struct CosmicUnicornDisplayCommand {
         command_type(NONE),
         pixels(nullptr) {}
 
-    explicit CosmicUnicornDisplayCommand(const CommandType command_type, const unsigned char *pixels) :
+    explicit CosmicUnicornDisplayCommand(const CommandType command_type,
+                                         const unsigned char *pixels,
+                                         const char *buffer) :
         command_type(command_type),
-        pixels(pixels) {}
+        pixels(pixels)
+    {
+        strlcpy((char *)this->buffer, buffer, sizeof(this->buffer)) ;
+    }
 
     const CommandType command_type;
     const unsigned char* pixels;
+    uint8_t buffer[64];
 };
 
 class CosmicUnicornDisplayAgent : public Agent {
@@ -52,6 +60,8 @@ protected:
 
     void display_image(const uint8_t image[3072]);
     void clear_display();
+
+    void display_text(char *text_cstr);
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP
