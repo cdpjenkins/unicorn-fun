@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <iostream>
+using namespace std;
 
 #include "pico/stdlib.h"
 
@@ -16,6 +18,8 @@
 #include "cosmic_unicorn.hpp"
 using namespace pimoroni;
 
+#include "MQTTAgent.hpp"
+
 
 int main()
 {
@@ -25,8 +29,6 @@ int main()
 
     printf("sizeof PicoGraphics_PenRGB888: %d\n", sizeof(PicoGraphics_PenRGB888));
     printf("sizeof CosmicUnicorn: %d\n", sizeof(CosmicUnicorn));
-
-    sleep_ms(10000);
 
     //Start tasks and scheduler
     const char *rtos_name = "FreeRTOS";
@@ -39,6 +41,9 @@ int main()
 
     CLIAgent cliAgent(ledsAgent, commandInterpreterAgent);
     cliAgent.start();
+
+    MQTTAgent mqtt_agent;
+    mqtt_agent.start();
 
     vTaskStartScheduler();
 

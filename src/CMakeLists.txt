@@ -3,9 +3,14 @@ add_executable(${NAME}
 		Agent.cpp
 		CLIAgent.cpp
 		CommandInterpreterAgent.cpp
-		CosmicUnicornDisplayAgent.cpp)
+		CosmicUnicornDisplayAgent.cpp
+		MQTTAgent.cpp)
 
 include(libraries/pico_unicorn/pico_unicorn)
+
+if (NOT wifi_settings.h)
+	configure_file(../templates/wifi_settings_template.h wifi_settings.h COPYONLY)
+endif()
 
 # Pull in our pico_stdlib which pulls in commonly used features
 target_link_libraries(${NAME}
@@ -14,6 +19,9 @@ target_link_libraries(${NAME}
 		hardware_pio
 		hardware_dma
 		cosmic_unicorn
+
+		cyw43_driver_picow
+		pico_cyw43_arch_lwip_sys_freertos
 		)
 
 target_include_directories(${NAME} PRIVATE
@@ -21,7 +29,7 @@ target_include_directories(${NAME} PRIVATE
      )
      
 target_compile_definitions(${NAME} PRIVATE
-    configNUM_CORES=2
+    configNUM_CORES=1
 )
 
 # create map/bin/hex file etc.
