@@ -18,23 +18,45 @@ enum CommandType {
     TEXT
 };
 
-struct CosmicUnicornDisplayCommand {
-    explicit CosmicUnicornDisplayCommand() :
-        command_type(NONE),
-        pixels(nullptr) {}
+struct ClearCommandBody {
+    uint8_t value;
+};
 
-    explicit CosmicUnicornDisplayCommand(const CommandType command_type,
-                                         const unsigned char *pixels,
-                                         const char *buffer) :
-        command_type(command_type),
-        pixels(pixels)
-    {
-        strlcpy((char *)this->buffer, buffer, sizeof(this->buffer)) ;
+struct DisplayImageCommandBody {
+    uint8_t *image;
+};
+
+struct TextCommand {
+    char text[64];
+};
+
+union CommandBody {
+    ClearCommandBody clear_command;
+    DisplayImageCommandBody display_image_command;
+    TextCommand text_command;
+
+    void init_clear_command(uint8_t value) {
+        this->clear_command.value = value;
     }
 
+    void init_display_image_command(const uint8_t *image) {
+        this->display_image_command.image = (uint8_t *)image;
+    }
+
+    void init_text_command(const char *text) {
+        strlcpy((char *)this->text_command.text, (char *)text, sizeof(this->text_command.text));
+    }
+};
+
+struct CosmicUnicornDisplayCommand {
     const CommandType command_type;
-    const unsigned char* pixels;
-    uint8_t buffer[64];
+    CommandBody body;
+
+    explicit CosmicUnicornDisplayCommand() : CosmicUnicornDisplayCommand(NONE) {}
+
+    explicit CosmicUnicornDisplayCommand(CommandType command_type) : command_type(command_type) {
+        memset(&body, 0, sizeof(body));
+    }
 };
 
 class CosmicUnicornDisplayAgent : public Agent {

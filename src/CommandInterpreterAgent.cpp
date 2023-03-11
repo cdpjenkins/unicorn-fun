@@ -94,9 +94,20 @@ void CommandInterpreterAgent::task_main() {
                 send_clear_command();
             } else if (command == "stats") {
                 task_stats();
-            } else if (command.rfind("text", 0) == 0) {
+            } else if (command.rfind("text ", 0) == 0) {
                 std::string text = command.substr(5);
                 send_text_command(text);
+            } else if (command.rfind("brightness ", 0) == 0) {
+                std::string text = command.substr(11);
+                printf("%s\n", text.c_str());
+
+                try {
+                    int value = std::stoi(text);
+                } catch (std::invalid_argument &e) {
+                    printf("%s\n", e.what());
+                }
+            } else {
+                printf("Command not recognised: %s\n", command.c_str());
             }
         } else {
             // I guess 0 means nothing was sent
@@ -105,7 +116,9 @@ void CommandInterpreterAgent::task_main() {
 }
 
 void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
-    auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image, nullptr);
+    CosmicUnicornDisplayCommand command{DISPLAY_IMAGE};
+    command.body.init_display_image_command(image);
+
     cosmic_unicorn_agent.send(&command);
 }
 
@@ -124,11 +137,16 @@ void CommandInterpreterAgent::send_command(char *command_string) {
 }
 
 void CommandInterpreterAgent::send_clear_command() {
-    auto clear_command = CosmicUnicornDisplayCommand(CLEAR, nullptr, nullptr);
-    cosmic_unicorn_agent.send(&clear_command);
+    CosmicUnicornDisplayCommand command{CLEAR};
+    command.body.init_clear_command(0);
+
+    cosmic_unicorn_agent.send(&command);
 }
 
 void CommandInterpreterAgent::send_text_command(std::string text) {
-    auto text_command = CosmicUnicornDisplayCommand(TEXT, nullptr, text.c_str());
-    cosmic_unicorn_agent.send(&text_command);
+
+    CosmicUnicornDisplayCommand command{TEXT};
+    command.body.init_text_command(text.c_str());
+
+    cosmic_unicorn_agent.send(&command);
 }

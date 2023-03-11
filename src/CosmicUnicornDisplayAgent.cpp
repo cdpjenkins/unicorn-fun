@@ -41,13 +41,13 @@ void CosmicUnicornDisplayAgent::task_main() {
         if (rc == pdTRUE) {
             switch (command.command_type) {
                 case DISPLAY_IMAGE:
-                    display_image(command.pixels);
+                    display_image(command.body.display_image_command.image);
                     break;
                 case CLEAR:
                     clear_display();
                     break;
                 case TEXT:
-                    display_text((char*)command.buffer);
+                    display_text(command.body.text_command.text);
                     break;
                 default:
                     printf("Unrecognised command: %d\n", command.command_type);
