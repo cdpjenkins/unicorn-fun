@@ -101,7 +101,6 @@ void CommandInterpreterAgent::task_main() {
 
 void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
     auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image);
-    auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image);
     cosmic_unicorn_agent.send(&command);
 }
 
