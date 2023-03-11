@@ -103,6 +103,8 @@ void CommandInterpreterAgent::task_main() {
 
                 try {
                     int value = std::stoi(text);
+
+                    send_brightness_command((uint8_t)value);
                 } catch (std::invalid_argument &e) {
                     printf("%s\n", e.what());
                 }
@@ -113,13 +115,6 @@ void CommandInterpreterAgent::task_main() {
             // I guess 0 means nothing was sent
         }
     }
-}
-
-void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
-    CosmicUnicornDisplayCommand command{DISPLAY_IMAGE};
-    command.body.init_display_image_command(image);
-
-    cosmic_unicorn_agent.send(&command);
 }
 
 void CommandInterpreterAgent::send_command(char *command_string) {
@@ -136,17 +131,31 @@ void CommandInterpreterAgent::send_command(char *command_string) {
     }
 }
 
+void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
+    CosmicUnicornDisplayCommand command{DISPLAY_IMAGE};
+    command.body.display_image_command.init(image);
+
+    cosmic_unicorn_agent.send(&command);
+}
+
 void CommandInterpreterAgent::send_clear_command() {
     CosmicUnicornDisplayCommand command{CLEAR};
-    command.body.init_clear_command(0);
+    command.body.clear_command.init(0);
 
     cosmic_unicorn_agent.send(&command);
 }
 
 void CommandInterpreterAgent::send_text_command(std::string text) {
-
     CosmicUnicornDisplayCommand command{TEXT};
-    command.body.init_text_command(text.c_str());
+    command.body.text_command.init(text.c_str());
 
     cosmic_unicorn_agent.send(&command);
+}
+
+void CommandInterpreterAgent::send_brightness_command(uint8_t brightness) {
+    CosmicUnicornDisplayCommand command{BRIGHTNESS};
+    command.body.brightness_command.init(brightness);
+
+    cosmic_unicorn_agent.send(&command);
+
 }

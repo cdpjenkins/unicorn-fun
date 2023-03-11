@@ -25,7 +25,8 @@ using namespace pimoroni;
 CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
         Agent("leds_task",
               configMINIMAL_STACK_SIZE * 2,
-              tskIDLE_PRIORITY + 1UL)
+              tskIDLE_PRIORITY + 1UL),
+        brightness(64)
 {
     command_queue = xQueueCreate(16, sizeof(CosmicUnicornDisplayCommand));
     cosmic_unicorn.init();
@@ -49,6 +50,11 @@ void CosmicUnicornDisplayAgent::task_main() {
                 case TEXT:
                     display_text(command.body.text_command.text);
                     break;
+                case BRIGHTNESS: {
+                    brightness = command.body.brightness_command.brightness;
+                    const std::string &cstr = std::to_string(brightness);
+                    break;
+                }
                 default:
                     printf("Unrecognised command: %d\n", command.command_type);
                     break;
@@ -120,12 +126,20 @@ void CosmicUnicornDisplayAgent::display_image(const uint8_t image[3072]) {
             uint8_t g = *p++;
             uint8_t b = *p++;
 
-            graphics.set_pen(r / 8, g / 8, b / 8);
-            graphics.pixel(Point(x, y));
+            plot_pixel(Point(x, y), r, g, b);
         }
     }
 
     cosmic_unicorn.update(&graphics);
+}
+
+void CosmicUnicornDisplayAgent::plot_pixel(const Point &point, uint8_t red, uint8_t green, uint8_t blue) {
+    int r = ((int)red   * brightness) / 256;
+    int g = ((int)green * brightness) / 256;
+    int b = ((int)blue  * brightness) / 256;
+
+    graphics.set_pen(r, g, b);
+    graphics.pixel(point);
 }
 
 void CosmicUnicornDisplayAgent::send(CosmicUnicornDisplayCommand *pCommand) {

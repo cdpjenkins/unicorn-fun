@@ -15,37 +15,47 @@ enum CommandType {
     NONE,
     CLEAR,
     DISPLAY_IMAGE,
-    TEXT
+    TEXT,
+    BRIGHTNESS
 };
 
 struct ClearCommandBody {
     uint8_t value;
+
+    void init(uint8_t value) {
+        this->value = value;
+    }
 };
 
 struct DisplayImageCommandBody {
     uint8_t *image;
+
+    void init(const uint8_t *image) {
+        this->image = (uint8_t *)image;
+    }
 };
 
 struct TextCommand {
     char text[64];
+
+    void init(const char *text) {
+        strlcpy(this->text, text, sizeof(this->text));
+    }
+};
+
+struct BrightnessCommand {
+    uint8_t brightness;
+
+    void init(const uint8_t brightness) {
+        this->brightness = brightness;
+    }
 };
 
 union CommandBody {
     ClearCommandBody clear_command;
     DisplayImageCommandBody display_image_command;
     TextCommand text_command;
-
-    void init_clear_command(uint8_t value) {
-        this->clear_command.value = value;
-    }
-
-    void init_display_image_command(const uint8_t *image) {
-        this->display_image_command.image = (uint8_t *)image;
-    }
-
-    void init_text_command(const char *text) {
-        strlcpy((char *)this->text_command.text, (char *)text, sizeof(this->text_command.text));
-    }
+    BrightnessCommand brightness_command;
 };
 
 struct CosmicUnicornDisplayCommand {
@@ -77,6 +87,8 @@ private:
     pimoroni::PicoGraphics_PenRGB888 graphics{WIDTH, HEIGHT, nullptr};
     pimoroni::CosmicUnicorn cosmic_unicorn;
 
+    uint8_t brightness;
+
 protected:
     QueueHandle_t command_queue;
 
@@ -84,6 +96,8 @@ protected:
     void clear_display();
 
     void display_text(char *text_cstr);
+
+    void plot_pixel(const pimoroni::Point &point, uint8_t red, uint8_t green, uint8_t blue);
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP
