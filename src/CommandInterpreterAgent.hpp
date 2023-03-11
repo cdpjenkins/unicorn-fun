@@ -11,14 +11,14 @@ public:
 
     [[noreturn]]
     void task_main() override;
-
     void send_command(char *command_string);
 
 private:
     MessageBufferHandle_t message_buffer;
-    CosmicUnicornDisplayAgent &leds_agent;
+    CosmicUnicornDisplayAgent &cosmic_unicorn_agent;
 
     void send_image_command(const uint8_t *image);
+    void send_clear_command();
 };
 
 

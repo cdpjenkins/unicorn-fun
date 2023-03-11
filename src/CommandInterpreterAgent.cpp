@@ -18,7 +18,7 @@ CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agen
         Agent("command_interpreter_task",
               configMINIMAL_STACK_SIZE,
               tskIDLE_PRIORITY + 2),
-              leds_agent(agent)
+        cosmic_unicorn_agent(agent)
 {
     message_buffer = xMessageBufferCreate(1024);
 }
@@ -89,7 +89,7 @@ void CommandInterpreterAgent::task_main() {
             } else if (strcmp(receive_buffer, "heart_cat") == 0) {
                 send_image_command(HeartCat32x32::image);
             } else if (strcmp(receive_buffer, "clear") == 0) {
-                send_image_command(clear);
+                send_clear_command();
             } else if (strcmp(receive_buffer, "stats") == 0) {
                 task_stats();
             }
@@ -100,8 +100,9 @@ void CommandInterpreterAgent::task_main() {
 }
 
 void CommandInterpreterAgent::send_image_command(const uint8_t *image) {
-    auto oi_command = CosmicUnicornDisplayCommand(image);
-    leds_agent.send(&oi_command);
+    auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image);
+    auto command = CosmicUnicornDisplayCommand(DISPLAY_IMAGE, image);
+    cosmic_unicorn_agent.send(&command);
 }
 
 void CommandInterpreterAgent::send_command(char *command_string) {
@@ -116,4 +117,9 @@ void CommandInterpreterAgent::send_command(char *command_string) {
     if (res != command_length){
         printf("ERROR: failed to write whole message to buffer\n");
     }
+}
+
+void CommandInterpreterAgent::send_clear_command() {
+    auto clear_command = CosmicUnicornDisplayCommand(CLEAR, nullptr);
+    cosmic_unicorn_agent.send(&clear_command);
 }

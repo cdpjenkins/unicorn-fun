@@ -10,10 +10,22 @@
 
 #include "Agent.hpp"
 
-struct CosmicUnicornDisplayCommand {
-    explicit CosmicUnicornDisplayCommand() : pixels(nullptr) {}
-    explicit CosmicUnicornDisplayCommand(const unsigned char *string) : pixels(string) {}
+enum CommandType {
+    NONE,
+    CLEAR,
+    DISPLAY_IMAGE
+};
 
+struct CosmicUnicornDisplayCommand {
+    explicit CosmicUnicornDisplayCommand() :
+        command_type(NONE),
+        pixels(nullptr) {}
+
+    explicit CosmicUnicornDisplayCommand(const CommandType command_type, const unsigned char *pixels) :
+        command_type(command_type),
+        pixels(pixels) {}
+
+    const CommandType command_type;
     const unsigned char* pixels;
 };
 
@@ -39,6 +51,7 @@ protected:
     QueueHandle_t command_queue;
 
     void display_image(const uint8_t image[3072]);
+    void clear_display();
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP

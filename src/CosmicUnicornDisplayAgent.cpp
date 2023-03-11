@@ -36,7 +36,17 @@ void CosmicUnicornDisplayAgent::task_main() {
         CosmicUnicornDisplayCommand command;
         BaseType_t rc = xQueueReceive(command_queue, (void *)&command, 1000);
         if (rc == pdTRUE) {
-            display_image(command.pixels);
+            switch (command.command_type) {
+                case DISPLAY_IMAGE:
+                    display_image(command.pixels);
+                    break;
+                case CLEAR:
+                    clear_display();
+                    break;
+                default:
+                    printf("Unrecognised command: %d\n", command.command_type);
+                    break;
+            }
         }
     }
 
@@ -99,3 +109,9 @@ void CosmicUnicornDisplayAgent::send(CosmicUnicornDisplayCommand *pCommand) {
     }
 }
 
+void CosmicUnicornDisplayAgent::clear_display() {
+    graphics.set_pen(0, 0, 0);
+    graphics.clear();
+
+    cosmic_unicorn.update(&graphics);
+}
