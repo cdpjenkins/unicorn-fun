@@ -22,6 +22,7 @@ target_link_libraries(${NAME}
 
 		cyw43_driver_picow
 		pico_cyw43_arch_lwip_sys_freertos
+		pico_lwip_mqtt
 		)
 
 target_include_directories(${NAME} PRIVATE

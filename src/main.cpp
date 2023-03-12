@@ -18,6 +18,8 @@ using namespace std;
 #include "cosmic_unicorn.hpp"
 using namespace pimoroni;
 
+#include "pico/cyw43_arch.h"
+
 #include "MQTTAgent.hpp"
 
 

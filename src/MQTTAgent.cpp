@@ -8,6 +8,18 @@ using namespace std;
 #include "Agent.hpp"
 #include "MQTTAgent.hpp"
 
+static const struct mqtt_connect_client_info_t mqtt_client_info =
+        {
+                "test",
+                MQTT_USERNAME,
+                MQTT_PASSWORD,
+                100,
+                NULL,
+                NULL,
+                0,
+                0
+        };
+
 MQTTAgent::MQTTAgent() :
         Agent("mqtt_agent",
               configMINIMAL_STACK_SIZE * 4,
@@ -15,6 +27,72 @@ MQTTAgent::MQTTAgent() :
 {
 
 }
+
+static void
+mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len)
+{
+    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+
+    printf("MQTT client \"%s\" publish cb: topic %s, len %d\n",
+           client_info->client_id,
+           topic,
+           (int)tot_len);
+}
+
+static void
+mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
+{
+    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+
+    printf("MQTT client \"%s\" data cb: len %d, flags %d\n",
+           client_info->client_id,
+           (int)len,
+           (int)flags);
+
+    int length = len;
+    if (length > 64-1) {
+        length = 64-1;
+    }
+
+    if (flags & MQTT_DATA_FLAG_LAST) {
+        char message[64];
+
+        memcpy(message, data, length);
+        message[length] = '\0';
+
+        printf("message: %s\n", message);
+    } else {
+        printf("More than one packet, which we can't currently handle\n");
+    }
+}
+
+static void
+mqtt_request_cb(void *arg, err_t err)
+{
+    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+
+    printf("MQTT client \"%s\" request cb: err %d\n",
+           client_info->client_id,
+           (int)err);
+}
+
+static void
+mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
+{
+    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+
+    printf("MQTT client \"%s\" connection cb: status %d\n",
+           client_info->client_id,
+           (int)status);
+
+    if (status == MQTT_CONNECT_ACCEPTED) {
+        mqtt_sub_unsub(client,
+                       MQTT_QUEUE, 1,
+                       mqtt_request_cb, LWIP_CONST_CAST(void*, client_info),
+                       1);
+    }
+}
+
 
 void MQTTAgent::task_main() {
     int rc;
@@ -43,8 +121,24 @@ void MQTTAgent::task_main() {
     cout << "Gateway:    " << ip4addr_ntoa(netif_ip_gw4(netif_default)) << endl;
     cout << "Hostname:   " << netif_get_hostname(netif_default) << endl;
 
+    mqtt_client_t *mqtt_client;
+
+    mqtt_client = mqtt_client_new();
+
+    mqtt_set_inpub_callback(mqtt_client,
+                            mqtt_incoming_publish_cb,
+                            mqtt_incoming_data_cb,
+                            LWIP_CONST_CAST(void*, &mqtt_client_info));
+
+    ip_addr_t mqtt_ip;
+    ip4_addr_set_u32(&mqtt_ip, ipaddr_addr("192.168.1.51"));
+
+    mqtt_client_connect(mqtt_client,
+                        &mqtt_ip, MQTT_PORT,
+                        mqtt_connection_cb, LWIP_CONST_CAST(void*, &mqtt_client_info),
+                        &mqtt_client_info);
+
     while (true) {
-        cout << "Meh" << endl;
-        vTaskDelay(10000);
+        vTaskDelay(1000);
     }
 }
