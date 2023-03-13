@@ -31,12 +31,9 @@ MQTTAgent::MQTTAgent() :
 static void
 mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len)
 {
-    const struct MQTTAgent* agent = (MQTTAgent *)arg;
+    MQTTAgent* agent = static_cast<MQTTAgent *>(arg);
 
-    printf("MQTT client \"%s\" publish cb: topic %s, len %d\n",
-           agent->get_name(),
-           topic,
-           (int)tot_len);
+    agent->incoming_publish_cb(topic, tot_len);
 }
 
 static void
@@ -144,4 +141,11 @@ void MQTTAgent::task_main() {
     while (true) {
         vTaskDelay(1000);
     }
+}
+
+void MQTTAgent::incoming_publish_cb(const char *topic, u32_t tot_len) {
+    printf("MEMBER: MQTT client \"%s\" publish cb: topic %s, len %d\n",
+           get_name(),
+           topic,
+           (int)tot_len);
 }

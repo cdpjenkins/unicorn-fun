@@ -10,6 +10,9 @@ public:
 
     [[noreturn]]
     void task_main() override;
+
+    void incoming_publish_cb(const char *topic, u32_t tot_len);
+
 private:
 };
 
