@@ -31,10 +31,10 @@ MQTTAgent::MQTTAgent() :
 static void
 mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len)
 {
-    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+    const struct MQTTAgent* agent = (MQTTAgent *)arg;
 
     printf("MQTT client \"%s\" publish cb: topic %s, len %d\n",
-           client_info->client_id,
+           agent->get_name(),
            topic,
            (int)tot_len);
 }
@@ -42,10 +42,10 @@ mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len)
 static void
 mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
 {
-    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+    const struct MQTTAgent* agent = (MQTTAgent *)arg;
 
     printf("MQTT client \"%s\" data cb: len %d, flags %d\n",
-           client_info->client_id,
+           agent->get_name(),
            (int)len,
            (int)flags);
 
@@ -69,30 +69,31 @@ mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
 static void
 mqtt_request_cb(void *arg, err_t err)
 {
-    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+    const struct MQTTAgent* agent = (MQTTAgent *)arg;
 
     printf("MQTT client \"%s\" request cb: err %d\n",
-           client_info->client_id,
+           agent->get_name(),
            (int)err);
 }
 
 static void
 mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
 {
-    const struct mqtt_connect_client_info_t* client_info = (const struct mqtt_connect_client_info_t*)arg;
+    const struct MQTTAgent* agent = (MQTTAgent *)arg;
 
     printf("MQTT client \"%s\" connection cb: status %d\n",
-           client_info->client_id,
+           agent->get_name(),
            (int)status);
 
     if (status == MQTT_CONNECT_ACCEPTED) {
         mqtt_sub_unsub(client,
-                       MQTT_QUEUE, 1,
-                       mqtt_request_cb, LWIP_CONST_CAST(void*, client_info),
+                       MQTT_QUEUE,
+                       1,
+                       mqtt_request_cb,
+                       LWIP_CONST_CAST(void*, agent),
                        1);
     }
 }
-
 
 void MQTTAgent::task_main() {
     int rc;
@@ -128,14 +129,16 @@ void MQTTAgent::task_main() {
     mqtt_set_inpub_callback(mqtt_client,
                             mqtt_incoming_publish_cb,
                             mqtt_incoming_data_cb,
-                            LWIP_CONST_CAST(void*, &mqtt_client_info));
+                            this);
 
     ip_addr_t mqtt_ip;
     ip4_addr_set_u32(&mqtt_ip, ipaddr_addr("192.168.1.51"));
 
     mqtt_client_connect(mqtt_client,
-                        &mqtt_ip, MQTT_PORT,
-                        mqtt_connection_cb, LWIP_CONST_CAST(void*, &mqtt_client_info),
+                        &mqtt_ip,
+                        MQTT_PORT,
+                        mqtt_connection_cb,
+                        this,
                         &mqtt_client_info);
 
     while (true) {

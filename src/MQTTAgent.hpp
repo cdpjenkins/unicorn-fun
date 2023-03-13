@@ -13,5 +13,4 @@ public:
 private:
 };
 
-
 #endif //UNICORN_FUN_MQTTAGENT_HPP

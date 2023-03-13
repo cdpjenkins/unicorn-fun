@@ -12,6 +12,9 @@ public:
     void start();
 
     static void entry_point_static_function(void *params);
+
+    [[nodiscard]]
+    const char *get_name() const { return task_name; }
 protected:
     virtual void task_main() = 0;
 private:
