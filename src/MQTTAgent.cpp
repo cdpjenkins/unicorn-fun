@@ -29,38 +29,13 @@ MQTTAgent::MQTTAgent() :
 }
 
 static void
-mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len)
-{
-    MQTTAgent* agent = static_cast<MQTTAgent *>(arg);
-
-    agent->incoming_publish_cb(topic, tot_len);
+mqtt_incoming_publish_cb(void *arg, const char *topic, u32_t tot_len) {
+    static_cast<MQTTAgent *>(arg)->incoming_publish_cb(topic, tot_len);
 }
 
 static void
-mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags)
-{
-    const struct MQTTAgent* agent = (MQTTAgent *)arg;
-
-    printf("MQTT client \"%s\" data cb: len %d, flags %d\n",
-           agent->get_name(),
-           (int)len,
-           (int)flags);
-
-    int length = len;
-    if (length > 64-1) {
-        length = 64-1;
-    }
-
-    if (flags & MQTT_DATA_FLAG_LAST) {
-        char message[64];
-
-        memcpy(message, data, length);
-        message[length] = '\0';
-
-        printf("message: %s\n", message);
-    } else {
-        printf("More than one packet, which we can't currently handle\n");
-    }
+mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags) {
+    static_cast<MQTTAgent *>(arg)->incoming_data_cb(data, len, flags);
 }
 
 static void
@@ -148,4 +123,27 @@ void MQTTAgent::incoming_publish_cb(const char *topic, u32_t tot_len) {
            get_name(),
            topic,
            (int)tot_len);
+}
+
+void MQTTAgent::incoming_data_cb(const u8_t *data, u16_t len, u8_t flags) {
+    printf("MEMBER: MQTT client \"%s\" data cb: len %d, flags %d\n",
+           get_name(),
+           (int)len,
+           (int)flags);
+
+    int length = len;
+    if (length > 64-1) {
+        length = 64-1;
+    }
+
+    if (flags & MQTT_DATA_FLAG_LAST) {
+        char message[64];
+
+        memcpy(message, data, length);
+        message[length] = '\0';
+
+        printf("message: %s\n", message);
+    } else {
+        printf("More than one packet, which we can't currently handle\n");
+    }
 }

@@ -12,6 +12,7 @@ public:
     void task_main() override;
 
     void incoming_publish_cb(const char *topic, u32_t tot_len);
+    void incoming_data_cb(const u8_t *data, u16_t len, u8_t flags);
 
 private:
 };
