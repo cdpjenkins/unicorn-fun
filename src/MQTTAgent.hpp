@@ -14,7 +14,9 @@ public:
     void incoming_publish_cb(const char *topic, u32_t tot_len);
     void incoming_data_cb(const u8_t *data, u16_t len, u8_t flags);
 
-private:
+    void request_cb(err_t err);
+
+    void connection_cb(mqtt_client_t *client, mqtt_connection_status_t status);
 };
 
 #endif //UNICORN_FUN_MQTTAGENT_HPP

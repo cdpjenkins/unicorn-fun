@@ -39,32 +39,13 @@ mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t flags) {
 }
 
 static void
-mqtt_request_cb(void *arg, err_t err)
-{
-    const struct MQTTAgent* agent = (MQTTAgent *)arg;
-
-    printf("MQTT client \"%s\" request cb: err %d\n",
-           agent->get_name(),
-           (int)err);
+mqtt_request_cb(void *arg, err_t err) {
+    static_cast<MQTTAgent *>(arg)->request_cb(err);
 }
 
 static void
-mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status)
-{
-    const struct MQTTAgent* agent = (MQTTAgent *)arg;
-
-    printf("MQTT client \"%s\" connection cb: status %d\n",
-           agent->get_name(),
-           (int)status);
-
-    if (status == MQTT_CONNECT_ACCEPTED) {
-        mqtt_sub_unsub(client,
-                       MQTT_QUEUE,
-                       1,
-                       mqtt_request_cb,
-                       LWIP_CONST_CAST(void*, agent),
-                       1);
-    }
+mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection_status_t status) {
+    static_cast<MQTTAgent *>(arg)->connection_cb(client, status);
 }
 
 void MQTTAgent::task_main() {
@@ -145,5 +126,26 @@ void MQTTAgent::incoming_data_cb(const u8_t *data, u16_t len, u8_t flags) {
         printf("message: %s\n", message);
     } else {
         printf("More than one packet, which we can't currently handle\n");
+    }
+}
+
+void MQTTAgent::request_cb(err_t err) {
+    printf("MEMBER: MQTT client \"%s\" request cb: err %d\n",
+           get_name(),
+           (int)err);
+}
+
+void MQTTAgent::connection_cb(mqtt_client_t *client, mqtt_connection_status_t status) {
+    printf("MEMBER: MQTT client \"%s\" connection cb: status %d\n",
+           get_name(),
+           (int)status);
+
+    if (status == MQTT_CONNECT_ACCEPTED) {
+        mqtt_sub_unsub(client,
+                       MQTT_QUEUE,
+                       1,
+                       mqtt_request_cb,
+                       this,
+                       1);
     }
 }
