@@ -85,7 +85,7 @@ void MQTTAgent::task_main() {
                             this);
 
     ip_addr_t mqtt_ip;
-    ip4_addr_set_u32(&mqtt_ip, ipaddr_addr("192.168.1.51"));
+    ip4_addr_set_u32(&mqtt_ip, ipaddr_addr(MQTT_BROKER_ADDRESS));
 
     mqtt_client_connect(mqtt_client,
                         &mqtt_ip,
