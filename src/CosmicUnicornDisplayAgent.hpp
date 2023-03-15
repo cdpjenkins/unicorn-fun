@@ -16,7 +16,8 @@ enum CommandType {
     CLEAR,
     DISPLAY_IMAGE,
     TEXT,
-    BRIGHTNESS
+    BRIGHTNESS,
+    DISPLAY_CONWAY_GRID
 };
 
 struct ClearCommandBody {
@@ -51,11 +52,14 @@ struct BrightnessCommand {
     }
 };
 
+struct ConwayDisplayCommand {};
+
 union CommandBody {
     ClearCommandBody clear_command;
     DisplayImageCommandBody display_image_command;
     TextCommand text_command;
     BrightnessCommand brightness_command;
+    ConwayDisplayCommand conway_display_command;
 };
 
 struct CosmicUnicornDisplayCommand {

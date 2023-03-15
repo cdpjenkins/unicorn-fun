@@ -108,6 +108,8 @@ void CommandInterpreterAgent::task_main() {
                 } catch (std::invalid_argument &e) {
                     printf("%s\n", e.what());
                 }
+            } else if (command == "conway display") {
+                send_command_conway_display();
             } else {
                 printf("Command not recognised: %s\n", command.c_str());
             }
@@ -157,5 +159,10 @@ void CommandInterpreterAgent::send_brightness_command(uint8_t brightness) {
     command.body.brightness_command.init(brightness);
 
     cosmic_unicorn_agent.send(&command);
+}
 
+void CommandInterpreterAgent::send_command_conway_display() {
+    CosmicUnicornDisplayCommand command{DISPLAY_CONWAY_GRID};
+
+    cosmic_unicorn_agent.send(&command);
 }

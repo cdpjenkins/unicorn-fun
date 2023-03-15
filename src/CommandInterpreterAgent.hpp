@@ -21,6 +21,7 @@ private:
     void send_clear_command();
     void send_text_command(std::string text);
     void send_brightness_command(uint8_t brightness);
+    void send_command_conway_display();
 };
 
 

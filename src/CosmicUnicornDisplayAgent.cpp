@@ -11,7 +11,6 @@
 
 #include "Agent.hpp"
 
-
 #include "libraries/pico_graphics/pico_graphics.hpp"
 #include "cosmic_unicorn.hpp"
 #include "images/CatFace32x32.hpp"
@@ -19,12 +18,13 @@
 #include "images/HeartCat32x32.hpp"
 #include "images/Cat32x32.hpp"
 #include "images/DogFace32x32.hpp"
+#include "conway/ConwayGrid.hpp"
 
 using namespace pimoroni;
 
 CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
         Agent("leds_task",
-              configMINIMAL_STACK_SIZE * 2,
+              configMINIMAL_STACK_SIZE * 4,
               tskIDLE_PRIORITY + 1UL),
         brightness(64)
 {
@@ -35,6 +35,14 @@ CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
 [[noreturn]]
 void CosmicUnicornDisplayAgent::task_main() {
     printf("Yo!\n");
+
+    ConwayGrid grid;
+    grid.invert_cell(3, 1);
+    grid.invert_cell(3, 2);
+    grid.invert_cell(3, 3);
+    grid.invert_cell(2, 3);
+    grid.invert_cell(1, 2);
+    grid.run();
 
     while (true) {
         CosmicUnicornDisplayCommand command;
@@ -55,46 +63,31 @@ void CosmicUnicornDisplayAgent::task_main() {
                     const std::string &cstr = std::to_string(brightness);
                     break;
                 }
+                case DISPLAY_CONWAY_GRID: {
+                    grid.step();
+
+                    printf("Display grid me do\n");
+                    for (int y = 0; y < grid.height; y++) {
+                        for (int x = 0; x < grid.width; x++) {
+                            if (grid.cell_alive_at(x, y)) {
+                                printf("%d,%d\n", x, y);
+
+                                plot_pixel(Point(x, y), 0xFF, 0xFF, 0xFF);
+                            } else {
+                                plot_pixel(Point(x, y), 0x00, 0x00, 0x00);
+                            }
+                        }
+                    }
+                    cosmic_unicorn.update(&graphics);
+                    printf("Displayed that grid!\n");
+
+                    break;
+                }
                 default:
                     printf("Unrecognised command: %d\n", command.command_type);
                     break;
             }
         }
-    }
-
-    constexpr TickType_t DELAY = 10000;
-
-    int i = 0;
-    while (true) {
-        graphics.set_pen(0, 0, 0);
-        graphics.clear();
-
-        display_image(CatFace32x32::image);
-        vTaskDelay(DELAY);
-
-        display_image(Cat32x32::image);
-        vTaskDelay(DELAY);
-
-        display_image(Dog32x32::image);
-        vTaskDelay(DELAY);
-
-        display_image(DogFace32x32::image);
-        vTaskDelay(DELAY);
-
-        display_image(HeartCat32x32::image);
-        vTaskDelay(DELAY);
-
-        graphics.set_pen(0, 0, 0);
-        graphics.clear();
-
-        graphics.set_pen(32, 32, 32);
-        graphics.text("Oi", Point(0, 0), -1, 0.55);
-        graphics.text("baby", Point(0, 8), -1, 0.55);
-        graphics.text(std::to_string(i++), Point(0, 16), -1, 0.55);
-
-        cosmic_unicorn.update(&graphics);
-
-        vTaskDelay(DELAY);
     }
 }
 

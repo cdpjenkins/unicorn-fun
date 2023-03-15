@@ -2,10 +2,8 @@
 #ifndef CONWAY_GRID_H
 #define CONWAY_GRID_H
 
-#define GRID_WIDTH 320
-#define GRID_HEIGHT 160
-
-#define MAX_LINE_LENGTH 1000
+constexpr int GRID_WIDTH  = 32;
+constexpr int GRID_HEIGHT = 32;
 
 class ConwayGrid {
 public:

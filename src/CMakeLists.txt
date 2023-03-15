@@ -4,7 +4,10 @@ add_executable(${NAME}
 		CLIAgent.cpp
 		CommandInterpreterAgent.cpp
 		CosmicUnicornDisplayAgent.cpp
-		MQTTAgent.cpp)
+		MQTTAgent.cpp
+
+		conway/ConwayGrid.cpp
+		)
 
 include(libraries/pico_unicorn/pico_unicorn)
 
