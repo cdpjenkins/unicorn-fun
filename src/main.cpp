@@ -44,7 +44,7 @@ int main()
     CLIAgent cliAgent(ledsAgent, commandInterpreterAgent);
     cliAgent.start();
 
-    MQTTAgent mqtt_agent;
+    MQTTAgent mqtt_agent(commandInterpreterAgent);
     mqtt_agent.start();
 
     vTaskStartScheduler();

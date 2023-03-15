@@ -7,6 +7,7 @@ using namespace std;
 
 #include "Agent.hpp"
 #include "MQTTAgent.hpp"
+#include "CommandInterpreterAgent.hpp"
 
 static const struct mqtt_connect_client_info_t mqtt_client_info =
         {
@@ -20,10 +21,11 @@ static const struct mqtt_connect_client_info_t mqtt_client_info =
                 0
         };
 
-MQTTAgent::MQTTAgent() :
+MQTTAgent::MQTTAgent(CommandInterpreterAgent agent) :
         Agent("mqtt_agent",
               configMINIMAL_STACK_SIZE * 4,
-              tskIDLE_PRIORITY + 1)
+              tskIDLE_PRIORITY + 1),
+        command_interpreter_agent(agent)
 {
 
 }
@@ -124,6 +126,8 @@ void MQTTAgent::incoming_data_cb(const u8_t *data, u16_t len, u8_t flags) {
         message[length] = '\0';
 
         printf("message: %s\n", message);
+
+        command_interpreter_agent.send_command(message);
     } else {
         printf("More than one packet, which we can't currently handle\n");
     }
