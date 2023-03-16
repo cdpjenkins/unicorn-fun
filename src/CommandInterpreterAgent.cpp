@@ -13,6 +13,9 @@
 #include "images/Dog32x32.hpp"
 #include "images/DogFace32x32.hpp"
 #include "images/HeartCat32x32.hpp"
+#include "images/Pig32x32.hpp"
+#include "images/PigFace32x32.hpp"
+#include "images/PigNose32x32.hpp"
 
 CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("command_interpreter_task",
@@ -90,6 +93,12 @@ void CommandInterpreterAgent::task_main() {
                 send_image_command(DogFace32x32::image);
             } else if (command == "heart_cat") {
                 send_image_command(HeartCat32x32::image);
+            } else if (command == "pig") {
+                send_image_command(Pig32x32::image);
+            } else if (command == "pig_face") {
+                send_image_command(PigFace32x32::image);
+            } else if (command == "pig_nose") {
+                send_image_command(PigNose32x32::image);
             } else if (command == "clear") {
                 send_clear_command();
             } else if (command == "stats") {

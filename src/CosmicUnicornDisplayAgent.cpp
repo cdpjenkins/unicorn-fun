@@ -12,12 +12,6 @@
 #include "Agent.hpp"
 
 #include "libraries/pico_graphics/pico_graphics.hpp"
-#include "cosmic_unicorn.hpp"
-#include "images/CatFace32x32.hpp"
-#include "images/Dog32x32.hpp"
-#include "images/HeartCat32x32.hpp"
-#include "images/Cat32x32.hpp"
-#include "images/DogFace32x32.hpp"
 #include "conway/ConwayGrid.hpp"
 
 using namespace pimoroni;
