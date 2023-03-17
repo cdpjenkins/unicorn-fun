@@ -135,7 +135,8 @@ void CommandInterpreterAgent::task_main() {
 
 void CommandInterpreterAgent::send_command(char *command_string) {
     WithMutexLock mutex_lock(message_buffer_mutex);
-    if(mutex_lock.mutex_acquired()) {
+
+    if(mutex_lock.lock()) {
         size_t command_length = strlen(command_string) + 1;
 
         size_t res = xMessageBufferSend(

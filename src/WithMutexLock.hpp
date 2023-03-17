@@ -9,9 +9,7 @@ public:
     WithMutexLock(SemaphoreHandle_t message_buffer_mutex);
     ~WithMutexLock();
 
-    bool mutex_acquired() {
-        return rc;
-    }
+    bool lock();
 
 private:
     SemaphoreHandle_t message_buffer_mutex;
