@@ -2,6 +2,7 @@
 #define HELLO_FREERTOS_PICO_COMMANDINTERPRETERAGENT_HPP
 
 #include <message_buffer.h>
+#include <semphr.h>
 #include "Agent.hpp"
 #include "CosmicUnicornDisplayAgent.hpp"
 
@@ -16,6 +17,7 @@ public:
 private:
     MessageBufferHandle_t message_buffer;
     CosmicUnicornDisplayAgent &cosmic_unicorn_agent;
+    SemaphoreHandle_t message_buffer_mutex;
 
     void send_image_command(const uint8_t *image);
     void send_clear_command();

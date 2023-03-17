@@ -16,6 +16,7 @@
 #include "images/Pig32x32.hpp"
 #include "images/PigFace32x32.hpp"
 #include "images/PigNose32x32.hpp"
+#include "WithMutexLock.hpp"
 
 CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("command_interpreter_task",
@@ -24,6 +25,10 @@ CommandInterpreterAgent::CommandInterpreterAgent(CosmicUnicornDisplayAgent &agen
         cosmic_unicorn_agent(agent)
 {
     message_buffer = xMessageBufferCreate(1024);
+    message_buffer_mutex = xSemaphoreCreateMutex();
+    if (message_buffer_mutex == nullptr) {
+        throw std::runtime_error("Failed to create message_buffer_mutex");
+    }
 }
 
 static void task_stats() {
@@ -129,16 +134,23 @@ void CommandInterpreterAgent::task_main() {
 }
 
 void CommandInterpreterAgent::send_command(char *command_string) {
-    size_t command_length = strlen(command_string) + 1;
+    WithMutexLock mutex_lock(message_buffer_mutex);
+    if(mutex_lock.mutex_acquired()) {
+        size_t command_length = strlen(command_string) + 1;
 
-    size_t  res = xMessageBufferSend(
-            message_buffer,
-            command_string,
-            command_length,
-            0);
+        size_t res = xMessageBufferSend(
+                message_buffer,
+                command_string,
+                command_length,
+                0);
 
-    if (res != command_length){
-        printf("ERROR: failed to write whole message to buffer\n");
+        if (res != command_length){
+            printf("ERROR: failed to write whole message to buffer\n");
+        }
+    }
+    else
+    {
+        printf("Failed to get mutex so looks like we're not going to execute command: %s\n", command_string);
     }
 }
 
