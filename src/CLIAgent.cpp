@@ -5,12 +5,11 @@
 #include "CLIAgent.hpp"
 #include "CosmicUnicornDisplayAgent.hpp"
 
-CLIAgent::CLIAgent(CosmicUnicornDisplayAgent &agent, CommandInterpreterAgent &interpreterAgent) :
-    Agent("cli_task",
+CLIAgent::CLIAgent(CosmicUnicornDisplayAgent &agent) :
+        Agent("cli_task",
           configMINIMAL_STACK_SIZE * 2,
           TASK_PRIORITY),
-    leds_agent(agent),
-    interpreter_agent(interpreterAgent)
+        cosmis_unicorn_agent(agent)
 {
 
 }
@@ -34,6 +33,6 @@ void CLIAgent::task_main() {
         }
         printf("\n");
 
-        interpreter_agent.send_command(line);
+        cosmis_unicorn_agent.send_command(line);
     }
 }

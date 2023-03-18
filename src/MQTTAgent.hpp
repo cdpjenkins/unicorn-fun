@@ -3,11 +3,11 @@
 
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/mqtt.h"
-#include "CommandInterpreterAgent.hpp"
+#include "CosmicUnicornDisplayAgent.hpp"
 
 class MQTTAgent : public Agent {
 public:
-    explicit MQTTAgent(CommandInterpreterAgent &agent);
+    MQTTAgent(CosmicUnicornDisplayAgent &agent);
 
     [[noreturn]]
     void task_main() override;
@@ -19,7 +19,7 @@ public:
 
     void connection_cb(mqtt_client_t *client, mqtt_connection_status_t status);
 private:
-    CommandInterpreterAgent &command_interpreter_agent;
+    CosmicUnicornDisplayAgent &command_interpreter_agent;
 };
 
 #endif //UNICORN_FUN_MQTTAGENT_HPP

@@ -12,13 +12,10 @@ using namespace std;
 #include "images/clear.h"
 #include "CosmicUnicornDisplayAgent.hpp"
 #include "CLIAgent.hpp"
-#include "CommandInterpreterAgent.hpp"
 
 #include "libraries/pico_graphics/pico_graphics.hpp"
 #include "cosmic_unicorn.hpp"
 using namespace pimoroni;
-
-#include "pico/cyw43_arch.h"
 
 #include "MQTTAgent.hpp"
 
@@ -38,13 +35,10 @@ int main()
     CosmicUnicornDisplayAgent ledsAgent;
     ledsAgent.start();
 
-    CommandInterpreterAgent commandInterpreterAgent(ledsAgent);
-    commandInterpreterAgent.start();
-
-    CLIAgent cliAgent(ledsAgent, commandInterpreterAgent);
+    CLIAgent cliAgent(ledsAgent);
     cliAgent.start();
 
-    MQTTAgent mqtt_agent(commandInterpreterAgent);
+    MQTTAgent mqtt_agent(ledsAgent);
     mqtt_agent.start();
 
     vTaskStartScheduler();

@@ -3,17 +3,15 @@
 
 #include "Agent.hpp"
 #include "CosmicUnicornDisplayAgent.hpp"
-#include "CommandInterpreterAgent.hpp"
 
 class CLIAgent : public Agent {
 public:
-    CLIAgent(CosmicUnicornDisplayAgent &agent, CommandInterpreterAgent &interpreterAgent);
+    CLIAgent(CosmicUnicornDisplayAgent &agent);
 
     [[noreturn]]
     void task_main() override;
 private:
-    CosmicUnicornDisplayAgent &leds_agent;
-    CommandInterpreterAgent &interpreter_agent;
+    CosmicUnicornDisplayAgent &cosmis_unicorn_agent;
 
     static const UBaseType_t TASK_PRIORITY = tskIDLE_PRIORITY + 1UL;
 };
