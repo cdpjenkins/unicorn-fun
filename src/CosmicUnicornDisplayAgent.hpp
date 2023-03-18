@@ -9,7 +9,11 @@
 #include "libraries/pico_graphics/pico_graphics.hpp"
 #include "cosmic_unicorn.hpp"
 
+#include <semphr.h>
+#include <message_buffer.h>
+
 #include "Agent.hpp"
+#include "conway/ConwayGrid.hpp"
 
 enum CommandType {
     NONE,
@@ -82,6 +86,8 @@ public:
 
     void send(CosmicUnicornDisplayCommand *pCommand);
 
+    void send_command(char *command);
+
     [[noreturn]]
     void task_main() override;
 
@@ -93,15 +99,17 @@ private:
 
     uint8_t brightness;
 
+    MessageBufferHandle_t command_message_buffer;
+    SemaphoreHandle_t message_buffer_mutex;
+
 protected:
     QueueHandle_t command_queue;
 
     void display_image(const uint8_t image[3072]);
     void clear_display();
-
-    void display_text(char *text_cstr);
-
+    void display_text(const char *text_cstr);
     void plot_pixel(const pimoroni::Point &point, uint8_t red, uint8_t green, uint8_t blue);
+    void conway_step(ConwayGrid &grid);
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP

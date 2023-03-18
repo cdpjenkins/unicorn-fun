@@ -21,7 +21,7 @@ static const struct mqtt_connect_client_info_t mqtt_client_info =
                 0
         };
 
-MQTTAgent::MQTTAgent(CommandInterpreterAgent agent) :
+MQTTAgent::MQTTAgent(CommandInterpreterAgent &agent) :
         Agent("mqtt_agent",
               configMINIMAL_STACK_SIZE * 4,
               tskIDLE_PRIORITY + 1),

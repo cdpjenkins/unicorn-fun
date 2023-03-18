@@ -87,46 +87,7 @@ void CommandInterpreterAgent::task_main() {
         );
         if (receive_length > 0) {
             std::string command{receive_buffer};
-
-            if (command == "cat") {
-                send_image_command(Cat32x32::image);
-            } else if (command == "cat_face") {
-                send_image_command(CatFace32x32::image);
-            } else if (command ==  "dog") {
-                send_image_command(Dog32x32::image);
-            } else if (command ==  "dog_face") {
-                send_image_command(DogFace32x32::image);
-            } else if (command == "heart_cat") {
-                send_image_command(HeartCat32x32::image);
-            } else if (command == "pig") {
-                send_image_command(Pig32x32::image);
-            } else if (command == "pig_face") {
-                send_image_command(PigFace32x32::image);
-            } else if (command == "pig_nose") {
-                send_image_command(PigNose32x32::image);
-            } else if (command == "clear") {
-                send_clear_command();
-            } else if (command == "stats") {
-                task_stats();
-            } else if (command.rfind("text ", 0) == 0) {
-                std::string text = command.substr(5);
-                send_text_command(text);
-            } else if (command.rfind("brightness ", 0) == 0) {
-                std::string text = command.substr(11);
-                printf("%s\n", text.c_str());
-
-                try {
-                    int value = std::stoi(text);
-
-                    send_brightness_command((uint8_t)value);
-                } catch (std::invalid_argument &e) {
-                    printf("%s\n", e.what());
-                }
-            } else if (command == "conway display") {
-                send_command_conway_display();
-            } else {
-                printf("Command not recognised: %s\n", command.c_str());
-            }
+            cosmic_unicorn_agent.send_command(receive_buffer);
         } else {
             // I guess 0 means nothing was sent
         }

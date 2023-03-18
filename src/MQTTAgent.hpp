@@ -7,7 +7,7 @@
 
 class MQTTAgent : public Agent {
 public:
-    explicit MQTTAgent(CommandInterpreterAgent agent);
+    explicit MQTTAgent(CommandInterpreterAgent &agent);
 
     [[noreturn]]
     void task_main() override;
@@ -19,7 +19,7 @@ public:
 
     void connection_cb(mqtt_client_t *client, mqtt_connection_status_t status);
 private:
-    CommandInterpreterAgent command_interpreter_agent;
+    CommandInterpreterAgent &command_interpreter_agent;
 };
 
 #endif //UNICORN_FUN_MQTTAGENT_HPP
