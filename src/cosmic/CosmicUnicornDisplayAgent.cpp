@@ -29,7 +29,7 @@ using namespace pimoroni;
 CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
         Agent("leds_task",
               configMINIMAL_STACK_SIZE * 4,
-              tskIDLE_PRIORITY + 1UL),
+              tskIDLE_PRIORITY + 2UL),
         brightness(64)
 {
     command_queue = xQueueCreate(16, sizeof(CosmicUnicornDisplayCommand));

@@ -2,7 +2,7 @@
 #define HELLO_FREERTOS_PICO_CLIAGENT_HPP
 
 #include "Agent.hpp"
-#include "CosmicUnicornDisplayAgent.hpp"
+#include "cosmic/CosmicUnicornDisplayAgent.hpp"
 
 class CLIAgent : public Agent {
 public:

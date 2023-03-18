@@ -3,7 +3,7 @@
 
 #include "pico/cyw43_arch.h"
 #include "lwip/apps/mqtt.h"
-#include "CosmicUnicornDisplayAgent.hpp"
+#include "cosmic/CosmicUnicornDisplayAgent.hpp"
 
 class MQTTAgent : public Agent {
 public:

@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "CLIAgent.hpp"
-#include "CosmicUnicornDisplayAgent.hpp"
+#include "cosmic/CosmicUnicornDisplayAgent.hpp"
 
 CLIAgent::CLIAgent(CosmicUnicornDisplayAgent &agent) :
         Agent("cli_task",

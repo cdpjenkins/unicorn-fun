@@ -7,18 +7,17 @@ using namespace std;
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "images/oi.h"
-#include "images/babi.h"
-#include "images/clear.h"
-#include "CosmicUnicornDisplayAgent.hpp"
-#include "CLIAgent.hpp"
 
 #include "libraries/pico_graphics/pico_graphics.hpp"
 #include "cosmic_unicorn.hpp"
 using namespace pimoroni;
 
+#include "images/oi.h"
+#include "images/babi.h"
+#include "images/clear.h"
+#include "cosmic/CosmicUnicornDisplayAgent.hpp"
+#include "CLIAgent.hpp"
 #include "MQTTAgent.hpp"
-
 
 int main()
 {

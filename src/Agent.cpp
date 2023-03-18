@@ -6,7 +6,7 @@
 
 #include "Agent.hpp"
 
-#include "CosmicUnicornDisplayAgent.hpp"
+#include "cosmic/CosmicUnicornDisplayAgent.hpp"
 
 Agent::Agent(const char *taskName, uint32_t stackDepth, UBaseType_t taskPriority) :
     task_name(taskName),

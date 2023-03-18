@@ -2,7 +2,7 @@ add_executable(${NAME}
         main.cpp
 		Agent.cpp
 		CLIAgent.cpp
-		CosmicUnicornDisplayAgent.cpp
+		cosmic/CosmicUnicornDisplayAgent.cpp
 		MQTTAgent.cpp
 		WithMutexLock.cpp
 
