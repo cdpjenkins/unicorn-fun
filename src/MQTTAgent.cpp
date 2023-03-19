@@ -21,7 +21,7 @@ static const struct mqtt_connect_client_info_t mqtt_client_info =
         };
 
 MQTTAgent::MQTTAgent(CosmicUnicornDisplayAgent &agent) :
-        Agent("mqtt_agent",
+        Agent("MQTTAgent",
               configMINIMAL_STACK_SIZE * 4,
               tskIDLE_PRIORITY + 1),
         command_interpreter_agent(agent)

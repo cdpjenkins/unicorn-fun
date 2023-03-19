@@ -6,7 +6,7 @@
 #include "cosmic/CosmicUnicornDisplayAgent.hpp"
 
 CLIAgent::CLIAgent(CosmicUnicornDisplayAgent &agent) :
-        Agent("cli_task",
+        Agent("CLIAgent",
           configMINIMAL_STACK_SIZE * 2,
           TASK_PRIORITY),
         cosmis_unicorn_agent(agent)

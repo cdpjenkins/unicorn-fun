@@ -27,7 +27,7 @@
 using namespace pimoroni;
 
 CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
-        Agent("leds_task",
+        Agent("CosmicUnicornDisplayAgent",
               configMINIMAL_STACK_SIZE * 4,
               tskIDLE_PRIORITY + 2UL),
         brightness(64)
