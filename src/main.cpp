@@ -19,25 +19,21 @@ using namespace pimoroni;
 #include "CLIAgent.hpp"
 #include "MQTTAgent.hpp"
 
+CosmicUnicornDisplayAgent ledsAgent;
+CLIAgent cliAgent(ledsAgent);
+MQTTAgent mqtt_agent(ledsAgent);
+
 int main()
 {
     stdio_init_all();
     sleep_ms(2000);
     printf("Starting unicorn-fun...\n");
 
-    printf("sizeof PicoGraphics_PenRGB888: %d\n", sizeof(PicoGraphics_PenRGB888));
-    printf("sizeof CosmicUnicorn: %d\n", sizeof(CosmicUnicorn));
-
     //Start tasks and scheduler
-    const char *rtos_name = "FreeRTOS";
-    printf("Starting %s on core 0:\n", rtos_name);
-    CosmicUnicornDisplayAgent ledsAgent;
+    printf("Starting FreeRTOS on core 0:\n");
+
     ledsAgent.start();
-
-    CLIAgent cliAgent(ledsAgent);
     cliAgent.start();
-
-    MQTTAgent mqtt_agent(ledsAgent);
     mqtt_agent.start();
 
     vTaskStartScheduler();
