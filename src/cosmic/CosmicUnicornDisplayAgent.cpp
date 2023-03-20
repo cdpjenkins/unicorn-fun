@@ -28,7 +28,7 @@ using namespace pimoroni;
 
 CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
         Agent("CosmicUnicornDisplayAgent",
-              configMINIMAL_STACK_SIZE * 4,
+              configMINIMAL_STACK_SIZE * 8,
               tskIDLE_PRIORITY + 2UL),
         brightness(64),
         scroll_text_app()

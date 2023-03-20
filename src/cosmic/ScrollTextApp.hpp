@@ -5,9 +5,12 @@
 #include <cosmic_unicorn.hpp>
 
 class ScrollTextApp {
-
 public:
-    void display_text(const char *tet, pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics);
+    ScrollTextApp();
+    void display_text(const char *text, pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics);
+
+private:
+    int scroll_displacement;
 };
 
 
