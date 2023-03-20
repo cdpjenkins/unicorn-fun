@@ -14,6 +14,7 @@
 
 #include "Agent.hpp"
 #include "conway/ConwayGrid.hpp"
+#include "ScrollTextApp.hpp"
 
 enum CommandType {
     NONE,
@@ -101,10 +102,11 @@ private:
 
     MessageBufferHandle_t command_message_buffer;
     SemaphoreHandle_t message_buffer_mutex;
-
-protected:
     QueueHandle_t command_queue;
 
+    ScrollTextApp scroll_text_app;
+
+protected:
     void display_image(const uint8_t image[3072]);
     void clear_display();
     void display_text(const char *text_cstr);

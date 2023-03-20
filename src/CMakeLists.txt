@@ -7,7 +7,7 @@ add_executable(${NAME}
 		WithMutexLock.cpp
 
 		conway/ConwayGrid.cpp
-        )
+        cosmic/ScrollTextApp.cpp)
 
 include(libraries/pico_unicorn/pico_unicorn)
 

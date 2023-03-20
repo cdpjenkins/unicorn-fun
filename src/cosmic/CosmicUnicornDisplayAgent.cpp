@@ -30,7 +30,8 @@ CosmicUnicornDisplayAgent::CosmicUnicornDisplayAgent() :
         Agent("CosmicUnicornDisplayAgent",
               configMINIMAL_STACK_SIZE * 4,
               tskIDLE_PRIORITY + 2UL),
-        brightness(64)
+        brightness(64),
+        scroll_text_app()
 {
     command_queue = xQueueCreate(16, sizeof(CosmicUnicornDisplayCommand));
     cosmic_unicorn.init();
@@ -172,23 +173,7 @@ void CosmicUnicornDisplayAgent::conway_step(ConwayGrid &grid) {
 }
 
 void CosmicUnicornDisplayAgent::display_text(const char *text_cstr) {
-    constexpr int TEXT_HEIGHT = 7;
-
-    std::istringstream iss(text_cstr);
-    std::string line;
-
-    graphics.set_pen(0, 0, 0);
-    graphics.clear();
-
-    int y = 0;
-    while (std::getline(iss, line, '_')) {
-        graphics.set_pen(32, 32, 32);
-        graphics.text(line, Point(0, y), -1, 0.55);
-
-        y += TEXT_HEIGHT;
-    }
-
-    cosmic_unicorn.update(&graphics);
+    scroll_text_app.display_text(text_cstr, cosmic_unicorn, graphics);
 }
 
 void CosmicUnicornDisplayAgent::display_image(const uint8_t image[3072]) {
