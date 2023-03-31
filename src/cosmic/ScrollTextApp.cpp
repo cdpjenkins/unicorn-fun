@@ -36,4 +36,8 @@ void ScrollTextApp::update(pimoroni::PicoGraphics_PenRGB888 &graphics) {
     }
 }
 
-void ScrollTextApp::set_text(const char *text) { ScrollTextApp::text = text; }
+void ScrollTextApp::set_text(const char *text) {
+    ScrollTextApp::text = text;
+
+    scroll_displacement = pimoroni::CosmicUnicorn::WIDTH;
+}

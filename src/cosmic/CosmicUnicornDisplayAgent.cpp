@@ -135,6 +135,12 @@ void CosmicUnicornDisplayAgent::task_main() {
             } else if (command.rfind("text ", 0) == 0) {
                 std::string text = command.substr(5);
                 display_text(text.c_str());
+            } else if (command.rfind("set_text ", 0) == 0) {
+                std::string text = command.substr(9);
+                scroll_text_app.set_text(text.c_str());
+            } else if (command.rfind("scroll_text", 0) == 0) {
+                scroll_text_app.update(graphics);
+                scroll_text_app.draw(cosmic_unicorn, graphics);
             } else if (command.rfind("brightness ", 0) == 0) {
                 std::string text = command.substr(11);
                 printf("%s\n", text.c_str());

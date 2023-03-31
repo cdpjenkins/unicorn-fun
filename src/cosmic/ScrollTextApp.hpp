@@ -9,19 +9,15 @@ class ScrollTextApp {
 public:
     ScrollTextApp();
     void display_text(const char *text, pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics);
+    void set_text(const char *text);
+    void update(pimoroni::PicoGraphics_PenRGB888 &graphics);
+    void draw(pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics) const;
 
 private:
     std::string text;
     int scroll_displacement;
 
-    void set_text(const char *text);
-
     static constexpr double TEXT_SCALE = 0.55;
-
-    void update(pimoroni::PicoGraphics_PenRGB888 &graphics);
-
-    void
-    draw(pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics) const;
 };
 
 
