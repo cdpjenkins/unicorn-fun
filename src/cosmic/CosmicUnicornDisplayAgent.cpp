@@ -88,7 +88,12 @@ static void task_stats() {
 
 [[noreturn]]
 void CosmicUnicornDisplayAgent::task_main() {
-    printf("Yo!\n");
+    tick_timer = xTimerCreate("tick_timer",
+                              100,
+                              true,
+                              (void *)this,
+                              timer_callback);
+    xTimerStart(tick_timer, 1000);
 
     ConwayGrid grid;
     grid.invert_cell(3, 1);
@@ -110,7 +115,7 @@ void CosmicUnicornDisplayAgent::task_main() {
         if (receive_length > 0) {
             std::string command{receive_buffer};
 
-            std::cout << "Message received: " << command << std::endl;
+//            std::cout << "Message received: " << command << std::endl;
 
             if (command == "cat") {
                 display_image(Cat32x32::image);
@@ -139,8 +144,7 @@ void CosmicUnicornDisplayAgent::task_main() {
                 std::string text = command.substr(9);
                 scroll_text_app.set_text(text.c_str());
             } else if (command.rfind("tick", 0) == 0) {
-                scroll_text_app.update(graphics);
-                scroll_text_app.draw(cosmic_unicorn, graphics);
+                tick();
             } else if (command.rfind("brightness ", 0) == 0) {
                 std::string text = command.substr(11);
                 printf("%s\n", text.c_str());
@@ -159,6 +163,11 @@ void CosmicUnicornDisplayAgent::task_main() {
             }
         }
     }
+}
+
+void CosmicUnicornDisplayAgent::tick() {
+    scroll_text_app.update(graphics);
+    scroll_text_app.draw(cosmic_unicorn, graphics);
 }
 
 void CosmicUnicornDisplayAgent::conway_step(ConwayGrid &grid) {
@@ -226,7 +235,7 @@ void CosmicUnicornDisplayAgent::send_command(char *command_string) {
                 0);
 
         if (res != command_length){
-            printf("ERROR: failed to write whole message to buffer\n");
+            printf("ERROR: failed to write whole message to buffer: %s\n", res);
         }
     }
     else
@@ -241,3 +250,12 @@ void CosmicUnicornDisplayAgent::clear_display() {
 
     cosmic_unicorn.update(&graphics);
 }
+
+void CosmicUnicornDisplayAgent::timer_callback(TimerHandle_t timer) {
+    void *timer_id = pvTimerGetTimerID(timer);
+
+    CosmicUnicornDisplayAgent *display_agent = static_cast<CosmicUnicornDisplayAgent *>(timer_id);
+
+    display_agent->send_command((char*)"tick");
+}
+

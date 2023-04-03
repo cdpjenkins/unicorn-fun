@@ -5,6 +5,8 @@
 #include "lwip/apps/mqtt.h"
 #include "cosmic/CosmicUnicornDisplayAgent.hpp"
 
+static const int MAX_MESSAGE_SIZE = 128;
+
 class MQTTAgent : public Agent {
 public:
     MQTTAgent(CosmicUnicornDisplayAgent &agent);

@@ -11,6 +11,7 @@
 
 #include <semphr.h>
 #include <message_buffer.h>
+#include <timers.h>
 
 #include "Agent.hpp"
 #include "conway/ConwayGrid.hpp"
@@ -42,7 +43,7 @@ struct DisplayImageCommandBody {
 };
 
 struct TextCommand {
-    char text[64];
+    char text[128];
 
     void init(const char *text) {
         strlcpy(this->text, text, sizeof(this->text));
@@ -104,7 +105,11 @@ private:
     SemaphoreHandle_t message_buffer_mutex;
     QueueHandle_t command_queue;
 
+    TimerHandle_t tick_timer;
+
     ScrollTextApp scroll_text_app;
+
+    static void timer_callback(TimerHandle_t timer);
 
 protected:
     void display_image(const uint8_t image[3072]);
@@ -112,6 +117,8 @@ protected:
     void display_text(const char *text_cstr);
     void plot_pixel(const pimoroni::Point &point, uint8_t red, uint8_t green, uint8_t blue);
     void conway_step(ConwayGrid &grid);
+
+    void tick();
 };
 
 #endif //HELLO_FREERTOS_PICO_LEDSAGENT_HPP

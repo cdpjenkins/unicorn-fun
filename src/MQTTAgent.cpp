@@ -114,12 +114,12 @@ void MQTTAgent::incoming_data_cb(const u8_t *data, u16_t len, u8_t flags) {
            (int)flags);
 
     int length = len;
-    if (length > 64-1) {
-        length = 64-1;
+    if (length > MAX_MESSAGE_SIZE - 1) {
+        length = MAX_MESSAGE_SIZE - 1;
     }
 
     if (flags & MQTT_DATA_FLAG_LAST) {
-        char message[64];
+        char message[MAX_MESSAGE_SIZE];
 
         memcpy(message, data, length);
         message[length] = '\0';
