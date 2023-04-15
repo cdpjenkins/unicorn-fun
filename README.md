@@ -1,3 +1,3 @@
-This is me following the Udemy course [FreeRTOS on Raspberry PI PICO
-](https://www.udemy.com/course/freertos-on-rpi-pico/) and trying to figure out how to use FreeRTSO on my
-Pi Pico as I go.
+This is me playing around with a Pimoroni Cosmic Unicorn device.
+This is an application running on FreeRTOS that drives the Unicorn's LED array.
+It uses LwIP's implementation of MQTT to receive commands.
