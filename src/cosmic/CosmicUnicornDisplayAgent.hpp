@@ -109,7 +109,7 @@ private:
 
     ScrollTextApp scroll_text_app;
 
-    ScrollTextApp *active_app = nullptr;
+    App *active_app = nullptr;
 
     static void timer_callback(TimerHandle_t timer);
 

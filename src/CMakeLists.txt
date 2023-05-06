@@ -5,9 +5,9 @@ add_executable(${NAME}
 		cosmic/CosmicUnicornDisplayAgent.cpp
 		MQTTAgent.cpp
 		WithMutexLock.cpp
-
 		conway/ConwayGrid.cpp
-        cosmic/ScrollTextApp.cpp)
+        cosmic/ScrollTextApp.cpp
+		cosmic/App.cpp)
 
 include(libraries/pico_unicorn/pico_unicorn)
 

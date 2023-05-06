@@ -4,8 +4,9 @@
 #include <string>
 
 #include <cosmic_unicorn.hpp>
+#include "App.hpp"
 
-class ScrollTextApp {
+class ScrollTextApp : public App {
 public:
     ScrollTextApp();
     void display_text(const char *text, pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics);

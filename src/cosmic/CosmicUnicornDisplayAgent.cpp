@@ -117,6 +117,8 @@ void CosmicUnicornDisplayAgent::task_main() {
 
             if (command == "activate scroll_text") {
                 active_app = &scroll_text_app;
+            } else if (command == "activate picture") {
+                // TODO
             } else if (command == "deactivate") {
                 active_app = nullptr;
             } else if (command == "cat") {
