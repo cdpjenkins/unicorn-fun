@@ -115,9 +115,11 @@ void CosmicUnicornDisplayAgent::task_main() {
         if (receive_length > 0) {
             std::string command{receive_buffer};
 
-//            std::cout << "Message received: " << command << std::endl;
-
-            if (command == "cat") {
+            if (command == "activate scroll_text") {
+                active_app = &scroll_text_app;
+            } else if (command == "deactivate") {
+                active_app = nullptr;
+            } else if (command == "cat") {
                 display_image(Cat32x32::image);
             } else if (command == "cat_face") {
                 display_image(CatFace32x32::image);
@@ -166,8 +168,10 @@ void CosmicUnicornDisplayAgent::task_main() {
 }
 
 void CosmicUnicornDisplayAgent::tick() {
-    scroll_text_app.update(graphics);
-    scroll_text_app.draw(cosmic_unicorn, graphics);
+    if (active_app != nullptr) {
+        active_app->update(graphics);
+        active_app->draw(cosmic_unicorn, graphics);
+    }
 }
 
 void CosmicUnicornDisplayAgent::conway_step(ConwayGrid &grid) {

@@ -25,8 +25,6 @@ void ScrollTextApp::display_text(const char *text,
 
 void ScrollTextApp::draw(pimoroni::CosmicUnicorn &cosmic_unicorn, pimoroni::PicoGraphics_PenRGB888 &graphics) const {
     if (text != "") {
-//        printf("draw: %s\n", this->text.c_str());
-
         graphics.set_pen(0, 0, 0);
         graphics.clear();
         graphics.set_pen(32, 32, 32);
