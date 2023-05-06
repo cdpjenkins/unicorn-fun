@@ -1,6 +1,7 @@
 #ifndef HELLO_FREERTOS_PICO_LEDSAGENT_HPP
 #define HELLO_FREERTOS_PICO_LEDSAGENT_HPP
 
+#include "FreeRTOS.h"
 #include <queue.h>
 #include <task.h>
 #include <portmacro.h>
@@ -16,6 +17,7 @@
 #include "Agent.hpp"
 #include "conway/ConwayGrid.hpp"
 #include "ScrollTextApp.hpp"
+#include "ImageApp.hpp"
 
 enum CommandType {
     NONE,
@@ -108,6 +110,7 @@ private:
     TimerHandle_t tick_timer;
 
     ScrollTextApp scroll_text_app;
+    ImageApp image_app;
 
     App *active_app = nullptr;
 

@@ -117,8 +117,8 @@ void CosmicUnicornDisplayAgent::task_main() {
 
             if (command == "activate scroll_text") {
                 active_app = &scroll_text_app;
-            } else if (command == "activate picture") {
-                // TODO
+            } else if (command == "activate image") {
+                active_app = &image_app;
             } else if (command == "deactivate") {
                 active_app = nullptr;
             } else if (command == "cat") {
@@ -198,18 +198,8 @@ void CosmicUnicornDisplayAgent::display_text(const char *text_cstr) {
 }
 
 void CosmicUnicornDisplayAgent::display_image(const uint8_t image[3072]) {
-    const uint8_t *p = image;
-    for (int y = 0; y < WIDTH; y++) {
-        for (int x = 0; x < HEIGHT; x++) {
-            uint8_t r = *p++;
-            uint8_t g = *p++;
-            uint8_t b = *p++;
 
-            plot_pixel(Point(x, y), r, g, b);
-        }
-    }
-
-    cosmic_unicorn.update(&graphics);
+    image_app.set_image(image);
 }
 
 void CosmicUnicornDisplayAgent::plot_pixel(const Point &point, uint8_t red, uint8_t green, uint8_t blue) {
