@@ -119,6 +119,8 @@ void CosmicUnicornDisplayAgent::task_main() {
                 active_app = &scroll_text_app;
             } else if (command == "activate image") {
                 active_app = &image_app;
+            } else if (command == "activate conway") {
+                active_app = &conway_app;
             } else if (command == "deactivate") {
                 active_app = nullptr;
             } else if (command == "cat") {
@@ -162,6 +164,8 @@ void CosmicUnicornDisplayAgent::task_main() {
                 }
             } else if (command == "conway display") {
                 conway_step(grid);
+            } else if (command == "conway glider") {
+                conway_app.add_hardcoded_glider();
             } else {
                 printf("Command not recognised: %s\n", command.c_str());
             }

@@ -9,7 +9,7 @@ add_executable(${NAME}
 		cosmic/App.cpp
 		cosmic/ImageApp.cpp
         cosmic/ScrollTextApp.cpp
-		)
+        cosmic/ConwayApp.cpp)
 
 include(libraries/pico_unicorn/pico_unicorn)
 

@@ -80,8 +80,6 @@ void ConwayGrid::pause() {
 }
 
 void ConwayGrid::invert_cell(int grid_x, int grid_y) {
-    if (!running) {
-        bool cell_value = current_grid[grid_index(grid_x, grid_y)];
-        current_grid[grid_index(grid_x, grid_y)] = !cell_value;
-    }
+    bool cell_value = current_grid[grid_index(grid_x, grid_y)];
+    current_grid[grid_index(grid_x, grid_y)] = !cell_value;
 }

@@ -18,6 +18,7 @@
 #include "conway/ConwayGrid.hpp"
 #include "ScrollTextApp.hpp"
 #include "ImageApp.hpp"
+#include "ConwayApp.hpp"
 
 enum CommandType {
     NONE,
@@ -111,6 +112,7 @@ private:
 
     ScrollTextApp scroll_text_app;
     ImageApp image_app;
+    ConwayApp conway_app;
 
     App *active_app = nullptr;
 

@@ -22,7 +22,7 @@ public:
 
     void invert_cell(int grid_x, int grid_y);
 
-    inline bool cell_alive_at(int x, int y) {
+    inline bool cell_alive_at(int x, int y) const {
         return current_grid[grid_index(x, y)];
     }
 
@@ -38,7 +38,7 @@ private:
         current_grid[grid_index(x, y)] = value;
     }
 
-    inline int grid_index(int column, int row) {
+    inline int grid_index(int column, int row) const {
         return row * width + column;
     }
 };
